@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 const NametagContainer = styled.div`
-    height: calc(100vh - 9rem);
+    height: calc(100vh - 10rem);
     display: flex;
     flex-direction: column;
     justify-content: center;
