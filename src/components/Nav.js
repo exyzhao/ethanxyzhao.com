@@ -31,13 +31,13 @@ const Nav = styled.nav`
 
 /* eslint import/no-anonymous-default-export: [2, {"allowArrowFunction": true}] */
 export default props => (
-    <Nav>
-        <NavLink exact to="/">
-            <b>Ethan Zhao</b>
-        </NavLink>
-        <div>
-          <NavLink to="/about/">About</NavLink>
-          <a href="https://drive.google.com/file/d/1VMxTaWhIm-txMZMhrfMyTMq4slt7o0Qp/view?usp=sharing">Resume</a>
-        </div>
-    </Nav>
+  <Nav>
+    <NavLink exact to="/" type="no-underline">
+      <b>Ethan Zhao</b>
+    </NavLink>
+    <div>
+      <NavLink to="/about/">About</NavLink>
+      <a href="https://drive.google.com/file/d/1VMxTaWhIm-txMZMhrfMyTMq4slt7o0Qp/view?usp=sharing">Resume</a>
+    </div>
+  </Nav>
 )

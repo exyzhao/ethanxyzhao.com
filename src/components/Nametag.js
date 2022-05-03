@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 const NametagContainer = styled.div`
-    height: calc(100vh - 10rem);
+    height: calc(100vh - 8.5rem);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -33,7 +33,7 @@ const NametagContainer = styled.div`
 
 const Namecard = styled.div`
     height: 15em;
-    width: 20em;
+    width: 19em;
     background-color: #e24243;
     border-radius: 24px;
     box-shadow: 0px 5px 10px #555555;
