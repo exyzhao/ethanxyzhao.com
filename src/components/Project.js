@@ -15,6 +15,10 @@ const ProjectHeader = styled.div`
 const ProjectHeaderLeft = styled.div`
     h3 {
         font-weight: 500;
+
+        @media(max-width: 768px) {
+            margin-bottom: 0;
+        }
     }
 `
 
@@ -23,9 +27,18 @@ const ProjectHeaderRight = styled.div`
     margin-right: 0;
     text-align: right;
 
+    @media(max-width: 768px) {
+        margin-bottom: 1em;
+    }
+
     h4 {
         color: #555;
         font-weight: 400;
+
+        @media(max-width: 768px) {
+            margin-top: 0.5em;
+            margin-bottom: 0.5em;
+        }
     }
 `
 
