@@ -37,7 +37,7 @@ export default props => (
     </NavLink>
     <div>
       <NavLink to="/about/">About</NavLink>
-      <a href="https://drive.google.com/file/d/1VMxTaWhIm-txMZMhrfMyTMq4slt7o0Qp/view?usp=sharing">Resume</a>
+      <a href="https://drive.google.com/file/d/1tsPccRXoyT5LBL-oXwEtAsc2-Zh-u1aj/view?usp=sharing">Resume</a>
     </div>
   </Nav>
 )
