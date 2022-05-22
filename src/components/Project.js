@@ -46,9 +46,28 @@ const ProjectLink = styled.a`
     margin: auto;
 `
 
+const ProjectImageWrapper = styled.div`
+    max-width: calc(100vw - 4rem);
+    overflow: none;
+`
+
 const ProjectImage = styled.img`
     max-width: calc(100vw - 4rem);
     margin: auto;
+
+    -webkit-transition: all 1s ease; /* Safari and Chrome */
+    -moz-transition: all 1s ease; /* Firefox */
+    -ms-transition: all 1s ease; /* IE 9 */
+    -o-transition: all 1s ease; /* Opera */
+    transition: all 1s ease;
+
+    &:hover {
+        -webkit-transform:scale(1.1); /* Safari and Chrome */
+        -moz-transform:scale(1.1); /* Firefox */
+        -ms-transform:scale(1.1); /* IE 9 */
+        -o-transform:scale(1.1); /* Opera */
+        transform:scale(1.1);
+    }
     
     @media(min-width: 768px) {
         max-width: calc(100vw - 40vw);
@@ -70,7 +89,9 @@ const Project = props => (
             </ProjectHeaderRight>
         </ProjectHeader>
         <ProjectLink href={props.link}>
-            <ProjectImage src={props.image} alt={props.title} />
+            <ProjectImageWrapper>
+                <ProjectImage src={props.image} alt={props.title} />
+            </ProjectImageWrapper>
         </ProjectLink>
     </>
 )
