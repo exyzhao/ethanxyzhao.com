@@ -55,11 +55,11 @@ const ProjectImage = styled.img`
     max-width: calc(100vw - 4rem);
     margin: auto;
 
-    -webkit-transition: all 1s ease; /* Safari and Chrome */
-    -moz-transition: all 1s ease; /* Firefox */
-    -ms-transition: all 1s ease; /* IE 9 */
-    -o-transition: all 1s ease; /* Opera */
-    transition: all 1s ease;
+    -webkit-transition: all 1s ease-in-out; /* Safari and Chrome */
+    -moz-transition: all 1s ease-in-out; /* Firefox */
+    -ms-transition: all 1s ease-in-out; /* IE 9 */
+    -o-transition: all 1s ease-in-out; /* Opera */
+    transition: all 1s ease-in-out;
 
     &:hover {
         -webkit-transform:scale(1.1); /* Safari and Chrome */
