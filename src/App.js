@@ -20,21 +20,21 @@ const Spacer = styled.div`
 
 const SunSpacer = styled(Spacer)`
   width: 100%;
-  background-color: rgb(142, 194, 245, 0.9);
+  max-width: 600px;
+  background-color: #74ACFF;
   z-index: ${props => props.zIndex};
 `
 
 const Card = styled.div`
   position: relative;
   width: calc(100vw - 100px);
+  max-width: 600px;
   padding: 30px 30px 60px; ${'' /* TOP SIDES BOT */}
   ${'' /* border: 1px solid black; */}
   border-radius: 20px;
-  background-color: #fff;
+  background-color: #F6F6F6;
 
   z-index: -1;
-
-  background-image: url(${olympic});
 
   @media only screen and (min-width: 768px) {
     width: calc(100vw - 120px);
@@ -71,7 +71,6 @@ const Initials = styled.img`
 `
 
 const HeroText = styled.div`
-  color: white;
   font-weight: normal;
 
   p {
@@ -107,9 +106,9 @@ const StyledButton = styled.div`
   align-items: center;
   height: 80px;
 
-  border: 1px solid #fff;
+  border: 1px solid #74ACFF;
   border-radius: 40px;
-  box-shadow: -4px 4px #fff;
+  box-shadow: -4px 4px #74ACFF;
 
   p {
     font-weight: normal;
@@ -119,6 +118,7 @@ const StyledButton = styled.div`
 const HeadingNumber = styled.p`
   position: absolute;
   top: 10px;
+  color: ${props => props.textColor};
 `
 
 const Project = styled.div`
@@ -128,8 +128,9 @@ const Project = styled.div`
   text-align: center;
   margin: 10px;
   padding: 40px 20px;
+  max-width: 600px;
 
-  background-color: white;
+  background-color: #F6F6F6;
   border: 1px solid #8EC2F5;
   border-radius: 40px;
   box-shadow: -4px 4px #8EC2F5;
@@ -148,6 +149,7 @@ const Project = styled.div`
 const HeaderText = styled.div`
 
   h2 {
+    color: ${props => props.textColor};
     font-size: 2.2em;
     font-weight: normal;
     margin: 0.1em;
@@ -179,7 +181,10 @@ const ProjectImage = styled.img`
 `
 
 const AboutImage = styled.img`
-  width: 330px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
   border-radius: 20px;
 `
 
@@ -218,28 +223,41 @@ const App = () => {
             <h2>project</h2>
             <h2 className="col3 up">portfolio</h2>
           </HeaderText>
+          <Spacer height="30px" />
+          <Project>
+            <ProjectImage src={playbook} />
+            <h3 className="project-title">Penn Playbook</h3>
+            <p className="sans">Design and data driven web exhibition of life at Penn</p>
+          </Project>
+          <Spacer height="30px" />
+          <Project>
+            <ProjectImage src={cohort} />
+            <h3 className="project-title">Cohort</h3>
+            <p className="sans">Group travel planning and itinerary generation app</p>
+          </Project>
+          <Spacer height="30px" />
+          <Project>
+            <ProjectImage src={penntix} />
+            <h3 className="project-title">PennTix</h3>
+            <p className="sans">Ticket resale platform for Penn students</p>
+          </Project>
         </CenterContainer>
-        <Spacer height="30px" />
-        <Project>
-          <ProjectImage src={playbook} />
-          <h3 className="project-title">Penn Playbook</h3>
-          <p className="sans">Design and data driven web exhibition of life at Penn</p>
-        </Project>
-        <Spacer height="30px" />
-        <Project>
-          <ProjectImage src={cohort} />
-          <h3 className="project-title">Cohort</h3>
-          <p className="sans">Group travel planning and itinerary generation app</p>
-        </Project>
-        <Spacer height="30px" />
-        <Project>
-          <ProjectImage src={penntix} />
-          <h3 className="project-title">PennTix</h3>
-          <p className="sans">Ticket resale platform for Penn students</p>
-        </Project>
       </Card>
       <Spacer height="30px" />
-      <AboutImage src={olympic} />
+      <Card>
+        <AboutImage src={olympic} />
+        <Spacer height="20px" />
+        <CenterContainer>
+          <HeadingNumber textColor="#F6F6F6">02</HeadingNumber>
+          <HeaderText textColor="#F6F6F6" >
+            <h2 className="col2">About</h2>
+            <h2>me</h2>
+          </HeaderText>
+        </CenterContainer>
+        <Spacer height="30px" />
+        <p>filler</p>
+      </Card>
+
     </Content>
   )
 }
