@@ -1,7 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
 
+:root {
+  --blue: #74ACFF;
+  --white: #F6F6F6;
+  --around-cards: calc(10px + 1vw);
+  --within-cards: calc(16px + 4vw);
+  --border-radius: calc(20px + 1vw);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background-color: #74ACFF;
+  background-color: var(--blue);
   margin: 0;
   font-family: Georgia;
 }
@@ -14,8 +26,19 @@ h1, h2 {
   font-weight: normal;
 }
 
+h3 {
+  font-size: calc(1.5em + 0.5vw);
+}
+
 p {
+  font-size: calc(1em + 0.5vw);
   margin: 0.2em;
+}
+
+.header {
+  font-size: calc(1.4em + 3.5vw);
+  font-weight: normal;
+  margin: 0.2em 0;
 }
 
 .sans {

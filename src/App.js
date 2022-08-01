@@ -1,44 +1,25 @@
 import styled from "styled-components"
 
+import Content from "./components/Content"
+import Spacer from "./components/Spacer"
+import Card from "./components/Card"
+import HeroText from "./components/HeroText"
+import ProjectsHeader from "./components/ProjectsHeader"
+import Projects from "./components/Projects"
+
 import sun from "./img/sun.svg"
 import initials from "./img/initials.svg"
-import playbook from "./img/playbook-mockups.png"
-import cohort from "./img/cohort-mockups-nologo.png"
-import penntix from "./img/penntix-mockups.png"
 import olympic from "./img/olympic.jpg"
 
-const Content = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-`
-
-const Spacer = styled.div`
-  height: ${props => props.height};
-`
+// 20px padding around cards
+// Mobile: 30px padding within cards
+// Desktop: 5vw padding within cards
 
 const SunSpacer = styled(Spacer)`
   width: 100%;
-  max-width: 600px;
-  background-color: #74ACFF;
+  max-width: 700px;
+  background-color: var(--blue);
   z-index: ${props => props.zIndex};
-`
-
-const Card = styled.div`
-  position: relative;
-  width: calc(100vw - 100px);
-  max-width: 600px;
-  padding: 30px 30px 60px; ${'' /* TOP SIDES BOT */}
-  ${'' /* border: 1px solid black; */}
-  border-radius: 20px;
-  background-color: #F6F6F6;
-
-  z-index: -1;
-
-  @media only screen and (min-width: 768px) {
-    width: calc(100vw - 120px);
-  }
 `
 
 const CenterContainer = styled.div`
@@ -55,60 +36,34 @@ const Sun = styled.img`
   z-index: 99;
 `
 
-const Initials = styled.img`
+const InitialsContainer = styled.div`
   position: absolute;
-  top: 160px;
-  left: -60px;
-  
-  @media only screen and (min-width: 768px) {
-    left: 0;
-    right: 0;
-    top: 160px;
-    margin: auto;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto;
+  width: calc(100% - 2 * var(--within-cards));
+
+  top: calc(50% + 15px);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
   z-index: -1;
 `
 
-const HeroText = styled.div`
-  font-weight: normal;
-
-  p {
-    font-size: 2.2em;
-    margin: 0.1em;
-  }
-
-  .col2 {
-    margin-left: min(max(60px, 10vw), 150px);
-  }
-  .col3 {
-    margin-left: min(max(120px, 20vw), 300px);
-  }
-  .col4 {
-    margin-left: min(max(160px, 24vw), 400px);
-  }
-
-  z-index: 999;
-
-  @media only screen and (min-width: 768px) {
-  p {
-    font-size: 3em;
-  }
-}
-`
-
-const BioText = styled.div`
+const Initials = styled.img`
+  min-width: calc(100px + 40vw);
 `
 
 const StyledButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 80px;
+  padding: calc(10px + 3vw);
 
   border: 1px solid #74ACFF;
-  border-radius: 40px;
+  border-radius: 100vw;
   box-shadow: -4px 4px #74ACFF;
+  cursor: pointer;
 
   p {
     font-weight: normal;
@@ -119,31 +74,6 @@ const HeadingNumber = styled.p`
   position: absolute;
   top: 10px;
   color: ${props => props.textColor};
-`
-
-const Project = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  margin: 10px;
-  padding: 40px 20px;
-  max-width: 600px;
-
-  background-color: #F6F6F6;
-  border: 1px solid #8EC2F5;
-  border-radius: 40px;
-  box-shadow: -4px 4px #8EC2F5;
-
-  h1, h2, h3, h4, h5, h6, p {
-    color: black;
-  }
-
-  .project-title {
-    font-size: 1.5em;
-    font-weight: normal;
-    margin: 40px 0px 20px;
-  }
 `
 
 const HeaderText = styled.div`
@@ -175,90 +105,117 @@ const HeaderText = styled.div`
 }
 `
 
-const ProjectImage = styled.img`
-  width: 200px;
-  border-radius: 10px;
-`
-
 const AboutImage = styled.img`
-  position: absolute;
-  left: 0;
-  top: 0;
   width: 100%;
   border-radius: 20px;
 `
 
+// const App = () => {
+//   return (
+//     <Content>
+//       <Sun src={sun} alt="sun" onMouseOver={() => console.log('sun!')} />
+//       <Card>
+//         <CenterContainer>
+//           <Initials src={initials} alt="initials" onMouseOver={() => console.log('ez')} />
+//           <Spacer height="50px" />
+//           <HeroText>
+//             <p>Howdy!</p>
+//             <p className="col2">I'm Ethan.</p>
+//             <p>And I love</p>
+//             <p className="col2"><em>designing</em></p>
+//             <p className="col4">and</p>
+//             <p className="col3"><em>building.</em></p>
+//           </HeroText>
+//           <Spacer height="30px" />
+//           <BioText>
+//             <p className="sans">Studying business</p>
+//             <p className="sans">at Penn/Wharton</p>
+//           </BioText>
+//         </CenterContainer>
+//         <Spacer height="30px" />
+//         <StyledButton onClick={() => console.log('clicked')}><p className="sans">SEE PORTFOLIO</p></StyledButton>
+//       </Card>
+//       <SunSpacer height="30px" zIndex={999} />
+//       <Card>
+//         <Spacer height="20px" />
+//         <CenterContainer>
+//           <HeadingNumber>01</HeadingNumber>
+//           <HeaderText>
+//             <h2 className="col2">My</h2>
+//             <h2>project</h2>
+//             <h2 className="col3 up">portfolio</h2>
+//           </HeaderText>
+//           <Spacer height="30px" />
+//           <Project>
+//             <ProjectImage src={playbook} />
+//             <h3 className="project-title">Penn Playbook</h3>
+//             <p className="sans">Design and data driven web exhibition of life at Penn</p>
+//           </Project>
+//           <Spacer height="30px" />
+//           <Project>
+//             <ProjectImage src={cohort} />
+//             <h3 className="project-title">Cohort</h3>
+//             <p className="sans">Group travel planning and itinerary generation app</p>
+//           </Project>
+//           <Spacer height="30px" />
+//           <Project>
+//             <ProjectImage src={penntix} />
+//             <h3 className="project-title">PennTix</h3>
+//             <p className="sans">Ticket resale platform for Penn students</p>
+//           </Project>
+//         </CenterContainer>
+//       </Card>
+//       <Spacer height="30px" />
+//       <Card>
+//       <AboutImage src={olympic}/>
+//         <Spacer height="20px" />
+//         <CenterContainer>
+//           <HeadingNumber textColor="#F6F6F6">02</HeadingNumber>
+//           <HeaderText textColor="#F6F6F6" >
+//             <h2 className="col2">About</h2>
+//             <h2>me</h2>
+//           </HeaderText>
+//         </CenterContainer>
+//         <Spacer height="30px" />
+//         <p>filler</p>
+//       </Card>
+//       <Card>
+
+//       </Card>
+
+//     </Content>
+//   )
+// }
+
+
 const App = () => {
+
   return (
     <Content>
       <Sun src={sun} alt="sun" onMouseOver={() => console.log('sun!')} />
       <Card>
-        <CenterContainer>
-          <Initials src={initials} alt="initials" onMouseOver={() => console.log('ez')} />
-          <Spacer height="50px" />
-          <HeroText>
-            <p>Hey there!</p>
-            <p className="col2">I'm Ethan.</p>
-            <p>And I love</p>
-            <p className="col2"><em>designing</em></p>
-            <p className="col4">and</p>
-            <p className="col3"><em>building.</em></p>
-          </HeroText>
-          <Spacer height="30px" />
-          <BioText>
-            <p className="sans">Studying business</p>
-            <p className="sans">at Penn/Wharton</p>
-          </BioText>
-        </CenterContainer>
-        <Spacer height="30px" />
-        <StyledButton onClick={() => console.log('clicked')}><p className="sans">SEE PORTFOLIO</p></StyledButton>
-      </Card>
-      <SunSpacer height="30px" zIndex={999} />
-      <Card>
+        <InitialsContainer>
+          <Initials src={initials} alt="initials" />
+        </InitialsContainer>
         <Spacer height="20px" />
-        <CenterContainer>
-          <HeadingNumber>01</HeadingNumber>
-          <HeaderText>
-            <h2 className="col2">My</h2>
-            <h2>project</h2>
-            <h2 className="col3 up">portfolio</h2>
-          </HeaderText>
-          <Spacer height="30px" />
-          <Project>
-            <ProjectImage src={playbook} />
-            <h3 className="project-title">Penn Playbook</h3>
-            <p className="sans">Design and data driven web exhibition of life at Penn</p>
-          </Project>
-          <Spacer height="30px" />
-          <Project>
-            <ProjectImage src={cohort} />
-            <h3 className="project-title">Cohort</h3>
-            <p className="sans">Group travel planning and itinerary generation app</p>
-          </Project>
-          <Spacer height="30px" />
-          <Project>
-            <ProjectImage src={penntix} />
-            <h3 className="project-title">PennTix</h3>
-            <p className="sans">Ticket resale platform for Penn students</p>
-          </Project>
-        </CenterContainer>
-      </Card>
-      <Spacer height="30px" />
-      <Card>
-        <AboutImage src={olympic} />
+        <HeroText />
         <Spacer height="20px" />
-        <CenterContainer>
-          <HeadingNumber textColor="#F6F6F6">02</HeadingNumber>
-          <HeaderText textColor="#F6F6F6" >
-            <h2 className="col2">About</h2>
-            <h2>me</h2>
-          </HeaderText>
-        </CenterContainer>
+        <p className="sans">Studying business</p>
+        <p className="sans">at Penn/Wharton</p>
         <Spacer height="30px" />
-        <p>filler</p>
+        <StyledButton onClick={() => document.querySelector('#portfolio').scrollIntoView()}>
+          <p className="sans">SEE PORTFOLIO</p>
+        </StyledButton>
       </Card>
-
+      <Spacer height="20px" id="portfolio" />
+      <Card>
+        <p>01</p>
+        <ProjectsHeader />
+        <Spacer height="calc(15px + 1vw)" />
+        <Projects />
+      </Card>
     </Content>
+
   )
 }
 
