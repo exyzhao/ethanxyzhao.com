@@ -194,8 +194,8 @@ const App = () => {
           <p className="sans">SEE PORTFOLIO</p>
         </StyledButton>
       </Card>
-      <Spacer height="10px" />
-      <Spacer height="10px" id="portfolio" />
+      <Spacer height="5px" />
+      <Spacer height="var(--around-cards)" id="portfolio" />
       <Card>
         <p>01</p>
         <ProjectsHeader />
