@@ -207,7 +207,8 @@ const App = () => {
           <p className="sans">SEE PORTFOLIO</p>
         </StyledButton>
       </Card>
-      <Spacer height="20px" id="portfolio" />
+      <Spacer height="10px" />
+      <Spacer height="10px" id="portfolio" />
       <Card>
         <p>01</p>
         <ProjectsHeader />
