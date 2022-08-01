@@ -15,19 +15,6 @@ import olympic from "./img/olympic.jpg"
 // Mobile: 30px padding within cards
 // Desktop: 5vw padding within cards
 
-const SunSpacer = styled(Spacer)`
-  width: 100%;
-  max-width: 700px;
-  background-color: var(--blue);
-  z-index: ${props => props.zIndex};
-`
-
-const CenterContainer = styled.div`
-  position: relative;
-  width: fit-content;
-  margin: auto;
-`
-
 const Sun = styled.img`
   position: fixed;
   top: 40px;

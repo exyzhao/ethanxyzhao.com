@@ -35,6 +35,10 @@ p {
   margin: 0.2em;
 }
 
+a {
+  text-decoration: none;
+}
+
 .header {
   font-size: calc(1.4em + 3.5vw);
   font-weight: normal;

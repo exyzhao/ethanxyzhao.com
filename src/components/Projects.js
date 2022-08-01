@@ -44,12 +44,14 @@ const ProjectImage = styled.img`
 const Projects = () => {
   return (
     <ProjectContainer>
-      <Project>
-        <ProjectImage src={playbook} />
-        <h3 className="project-title">Penn Playbook</h3>
-        <p className="sans">Design and data driven web</p>
-        <p className="sans">exhibition of life at Penn</p>
-      </Project>
+      <a href="http://www.pennplaybook.com/">
+        <Project>
+          <ProjectImage src={playbook} />
+          <h3 className="project-title">Penn Playbook</h3>
+          <p className="sans">Design and data driven web</p>
+          <p className="sans">exhibition of life at Penn</p>
+        </Project>
+      </a>
       <Spacer height="30px" />
       <Project>
         <ProjectImage src={cohort} />
@@ -58,12 +60,14 @@ const Projects = () => {
         <p className="sans">itinerary generation app</p>
       </Project>
       <Spacer height="30px" />
-      <Project>
-        <ProjectImage src={penntix} />
-        <h3 className="project-title">PennTix</h3>
-        <p className="sans">Ticket resale platform</p>
-        <p className="sans">for Penn students</p>
-      </Project>
+      <a href="https://penntix.herokuapp.com/">
+        <Project>
+          <ProjectImage src={penntix} />
+          <h3 className="project-title">PennTix</h3>
+          <p className="sans">Ticket resale platform</p>
+          <p className="sans">for Penn students</p>
+        </Project>
+      </a>
     </ProjectContainer>
   )
 }
