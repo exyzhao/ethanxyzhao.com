@@ -5,7 +5,7 @@ const App = () => {
       <div className={"flex justify-center p-6"}>
         <b className={"font-sans tracking-wider"}>ETHAN ZHAO</b>
       </div>
-      <div className={"flex px-4 pt-10 pb-16"}>
+      <div className={"flex max-w-lg px-4 pt-10 pb-16"}>
         <h1 className={"text-4xl leading-tight"}>
           I'm Ethan! I'm currently a student at Penn. I love designing and building things.
         </h1>
