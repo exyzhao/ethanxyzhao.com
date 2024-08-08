@@ -142,7 +142,15 @@ const App = () => {
         <div className="flex flex-col gap-5 px-4 pb-12 md:w-7/12">
           <div>
             <p>
-              <em>PDF Querier</em>
+              <a
+                target="_blank"
+                rel="noreferrer"
+                href="https://github.com/exyzhao/rag-pdf"
+              >
+                <em>
+                  <u>PDF Querier</u>
+                </em>
+              </a>
             </p>
             <ul className="list-disc pl-5">
               <li>
@@ -157,7 +165,15 @@ const App = () => {
           </div>
           <div>
             <p>
-              <em>Procedural City</em>
+              <a
+                target="_blank"
+                rel="noreferrer"
+                href="https://youtu.be/1XRC1sz3-N8?si=eJJf3mUlSiEbQPGV"
+              >
+                <em>
+                  <u>Procedural City</u>
+                </em>
+              </a>
             </p>
             <ul className="list-disc pl-5">
               <li>
