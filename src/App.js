@@ -1,209 +1,190 @@
-import styled from "styled-components"
-
-import Content from "./components/Content"
-import Spacer from "./components/Spacer"
-import Card from "./components/Card"
-import HeroText from "./components/HeroText"
-import ProjectsHeader from "./components/ProjectsHeader"
-import Projects from "./components/Projects"
-
-import sun from "./img/sun.svg"
-import initials from "./img/initials.svg"
-import olympic from "./img/olympic.jpg"
-
-// 20px padding around cards
-// Mobile: 30px padding within cards
-// Desktop: 5vw padding within cards
-
-const Sun = styled.img`
-  position: fixed;
-  top: 40px;
-  right: 40px;
-
-  z-index: 99;
-`
-
-const InitialsContainer = styled.div`
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: auto;
-  width: calc(100% - 2 * var(--within-cards));
-
-  top: calc(50% + 15px);
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
-  z-index: -1;
-`
-
-const Initials = styled.img`
-  min-width: calc(100px + 40vw);
-`
-
-const StyledButton = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: calc(10px + 3vw);
-
-  border: 1px solid #74ACFF;
-  border-radius: 100vw;
-  box-shadow: -4px 4px #74ACFF;
-  cursor: pointer;
-
-  p {
-    font-weight: normal;
-  }
-`
-
-const HeadingNumber = styled.p`
-  position: absolute;
-  top: 10px;
-  color: ${props => props.textColor};
-`
-
-const HeaderText = styled.div`
-
-  h2 {
-    color: ${props => props.textColor};
-    font-size: 2.2em;
-    font-weight: normal;
-    margin: 0.1em;
-  }
-
-  .col2 {
-    margin-left: min(max(60px, 10vw), 100px);
-  }
-  .col3 {
-    margin-left: min(max(100px, 15vw), 150px);
-  }
-
-  .up {
-    margin-top: -0.15em;
-  }
-
-  z-index: 999;
-
-  @media only screen and (min-width: 768px) {
-  h2 {
-    font-size: 3em;
-  }
-}
-`
-
-const AboutImage = styled.img`
-  width: 100%;
-  border-radius: 20px;
-`
-
-// const App = () => {
-//   return (
-//     <Content>
-//       <Sun src={sun} alt="sun" onMouseOver={() => console.log('sun!')} />
-//       <Card>
-//         <CenterContainer>
-//           <Initials src={initials} alt="initials" onMouseOver={() => console.log('ez')} />
-//           <Spacer height="50px" />
-//           <HeroText>
-//             <p>Howdy!</p>
-//             <p className="col2">I'm Ethan.</p>
-//             <p>And I love</p>
-//             <p className="col2"><em>designing</em></p>
-//             <p className="col4">and</p>
-//             <p className="col3"><em>building.</em></p>
-//           </HeroText>
-//           <Spacer height="30px" />
-//           <BioText>
-//             <p className="sans">Studying business</p>
-//             <p className="sans">at Penn/Wharton</p>
-//           </BioText>
-//         </CenterContainer>
-//         <Spacer height="30px" />
-//         <StyledButton onClick={() => console.log('clicked')}><p className="sans">SEE PORTFOLIO</p></StyledButton>
-//       </Card>
-//       <SunSpacer height="30px" zIndex={999} />
-//       <Card>
-//         <Spacer height="20px" />
-//         <CenterContainer>
-//           <HeadingNumber>01</HeadingNumber>
-//           <HeaderText>
-//             <h2 className="col2">My</h2>
-//             <h2>project</h2>
-//             <h2 className="col3 up">portfolio</h2>
-//           </HeaderText>
-//           <Spacer height="30px" />
-//           <Project>
-//             <ProjectImage src={playbook} />
-//             <h3 className="project-title">Penn Playbook</h3>
-//             <p className="sans">Design and data driven web exhibition of life at Penn</p>
-//           </Project>
-//           <Spacer height="30px" />
-//           <Project>
-//             <ProjectImage src={cohort} />
-//             <h3 className="project-title">Cohort</h3>
-//             <p className="sans">Group travel planning and itinerary generation app</p>
-//           </Project>
-//           <Spacer height="30px" />
-//           <Project>
-//             <ProjectImage src={penntix} />
-//             <h3 className="project-title">PennTix</h3>
-//             <p className="sans">Ticket resale platform for Penn students</p>
-//           </Project>
-//         </CenterContainer>
-//       </Card>
-//       <Spacer height="30px" />
-//       <Card>
-//       <AboutImage src={olympic}/>
-//         <Spacer height="20px" />
-//         <CenterContainer>
-//           <HeadingNumber textColor="#F6F6F6">02</HeadingNumber>
-//           <HeaderText textColor="#F6F6F6" >
-//             <h2 className="col2">About</h2>
-//             <h2>me</h2>
-//           </HeaderText>
-//         </CenterContainer>
-//         <Spacer height="30px" />
-//         <p>filler</p>
-//       </Card>
-//       <Card>
-
-//       </Card>
-
-//     </Content>
-//   )
-// }
-
+import { useEffect, useRef, useState } from 'react'
+import gsap from 'gsap'
+import sun from './assets/img/sun.svg'
 
 const App = () => {
+  const [sunX, setSunX] = useState(null)
+  const [sunY, setSunY] = useState(null)
+  const sunContainer = useRef(null)
+
+  // useEffect(() => {
+  //   setSunX(sunContainer.current.offsetLeft + 80)
+  //   setSunY(sunContainer.current.offsetTop + 80)
+  // }, [])
+
+  // document.body.addEventListener("mousemove", event => {
+  //   const mouseX = event.pageX
+  //   const mouseY = event.pageY
+
+  //   var dx = mouseX + sunX - 80
+  //   var dy = mouseY + sunY - 80
+  //   var angle = Math.atan2(dy, dx)
+
+  //   var faceX = 80 + 40 * Math.cos(angle)
+  //   var faceY = 80 + 40 * Math.cos(angle)
+
+  //   // if (!!dx && !!dy) {
+  //   //   gsap.to("#face", {
+  //   //     x: mouseX,
+  //   //     y: mouseY
+  //   //   })
+  //   // }
+  // })
 
   return (
-    <Content>
-      <Sun src={sun} alt="sun" onMouseOver={() => console.log('sun!')} />
-      <Card>
-        <InitialsContainer>
-          <Initials src={initials} alt="initials" />
-        </InitialsContainer>
-        <Spacer height="20px" />
-        <HeroText />
-        <Spacer height="20px" />
-        <p className="sans">Studying business</p>
-        <p className="sans">at Penn/Wharton</p>
-        <Spacer height="30px" />
-        <StyledButton onClick={() => document.querySelector('#portfolio').scrollIntoView()}>
-          <p className="sans">SEE PORTFOLIO</p>
-        </StyledButton>
-      </Card>
-      <Spacer height="5px" />
-      <Spacer height="var(--around-cards)" id="portfolio" />
-      <Card>
-        <p>01</p>
-        <ProjectsHeader />
-        <Spacer height="calc(15px + 1vw)" />
-        <Projects />
-      </Card>
-    </Content>
+    <div className="flex flex-col bg-blue1 font-serif">
+      {/* <div className={"bg-black h-5 w-5"} id="face" /> */}
+      <div className="flex justify-center bg-blue1 pb-6 pt-2 md:p-6">
+        <b className="font-sans tracking-wider">ETHAN ZHAO</b>
+      </div>
+      <div className="mx-auto flex w-full max-w-5xl flex-col justify-between md:flex-row">
+        <div className="flex max-w-xl px-4 pb-14 pt-10 md:pb-16 md:pl-8 lg:pl-20">
+          {/* Responsive horizontal padding repeated below */}
+          <h1 className="text-4xl leading-tight">
+            I'm Ethan! I'm currently a student at Penn. I love designing and
+            building things.
+          </h1>
+        </div>
+        <div className="flex justify-center px-4 pb-20 pt-6 md:pr-8 lg:pr-20">
+          <img src={sun} className="h-40 w-40" />
+          {/* <div
+            ref={sunContainer}
+            className={'h-40 w-40 rounded-full bg-yellow'}
+          >
+            <div className={"bg-black h-5 w-5"} id="face" />
+          </div> */}
+        </div>
+      </div>
 
+      <div className="flex flex-col items-center bg-blue2">
+        <div className="flex justify-center pb-8 pt-12">
+          <h2 className="font-sans tracking-wider">ABOUT ME</h2>
+        </div>
+        <div className="flex flex-col gap-5 px-4 pb-12 md:w-7/12">
+          <div>
+            <p>Studying:</p>
+            <p>@ The Wharton School, University of Pennsylvania</p>
+            <ul className="list-disc pl-5">
+              <li>Operations, Information, and Decisions</li>
+              <li>Business Analytics (Stats + Management)</li>
+              <li>Minor in CS</li>
+            </ul>
+          </div>
+          <div>
+            <p>Work:</p>
+            <ul className="list-disc pl-5">
+              <li>
+                SWE Intern at{' '}
+                <a target="_blank" rel="noreferrer" href="https://withpika.com">
+                  <em>
+                    <u>Pika Earth</u>
+                  </em>
+                </a>
+              </li>
+              <li>
+                PM Intern at{' '}
+                <a
+                  target="_blank"
+                  rel="noreferrer"
+                  href="https://www.splunk.com/en_us/products/it-service-intelligence.html"
+                >
+                  <em>
+                    <u>Splunk</u>
+                  </em>
+                </a>
+              </li>
+              <li>
+                ML & PM Intern at{' '}
+                <a
+                  target="_blank"
+                  rel="noreferrer"
+                  href="https://watchcharts.com"
+                >
+                  <em>
+                    <u>WatchCharts</u>
+                  </em>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <p>Outside of work:</p>
+            <ul className="list-disc pl-5">
+              <li>
+                Developing recipes and running a{' '}
+                <a
+                  target="_blank"
+                  rel="noreferrer"
+                  href="https://www.instagram.com/everynowthenn"
+                >
+                  <u>pop-up dining concept</u>
+                </a>
+              </li>
+              <li>
+                Spending time in makerspaces{' '}
+                <em>
+                  <u>(coming soon)</u>
+                </em>
+              </li>
+              <li>
+                Enjoying: volleyball, running, board games, crosswords, farmers'
+                markets
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-col items-center bg-blue3">
+        <div className="flex justify-center pb-8 pt-12">
+          <h2 className="font-sans tracking-wider">RECENT PROJECTS</h2>
+        </div>
+        <div className="flex flex-col gap-5 px-4 pb-12 md:w-7/12">
+          <div>
+            <p>
+              <em>PDF Querier</em>
+            </p>
+            <ul className="list-disc pl-5">
+              <li>
+                Utilized retrieval-augmented generation to enable querying
+                across multiple PDF files
+              </li>
+              <li>
+                Created Q&A interface providing document citations and answer
+                history
+              </li>
+            </ul>
+          </div>
+          <div>
+            <p>
+              <em>Procedural City</em>
+            </p>
+            <ul className="list-disc pl-5">
+              <li>
+                Implemented 3D wave function collapse to generate
+                non-deterministic layouts for a city
+              </li>
+              <li>
+                Worked with computer graphics team to populate layout with
+                assets
+              </li>
+            </ul>
+          </div>
+          <div>
+            <p>
+              <em>Penn Playbook</em>
+            </p>
+            <ul className="list-disc pl-5">
+              <li>
+                Developed app showcasing visualizations of mood/energy tracking,
+                confessions, hypotheticals, and other data from Penn's student
+                population
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 
