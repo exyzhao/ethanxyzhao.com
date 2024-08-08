@@ -200,6 +200,11 @@ const App = () => {
           </div>
         </div>
       </div>
+
+      <div className="flex flex-col items-center bg-blue2 pb-12 pt-12">
+        <h2 className="font-sans tracking-wider">EMAIL</h2>
+        <h2 className="font-sans tracking-wider">ethanxyzhao@gmail.com</h2>
+      </div>
     </div>
   )
 }
