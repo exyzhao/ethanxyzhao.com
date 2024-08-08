@@ -10,6 +10,8 @@ module.exports = {
       colors: {
         blue1: '#D3EAFF',
         blue2: '#7FC9FF',
+        blue3: '#4CB4FF',
+        yellow: '#FFC236',
       },
     },
   },
