@@ -189,6 +189,19 @@ body {
       #3a6ea5 100%
     );
     color: var(--win98-white);
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+  }
+
+  .win98-titlebar:active {
+    background: linear-gradient(
+      to right,
+      #000060 0%,
+      #000088 60%,
+      #2a4e85 100%
+    );
   }
 
   /* Tiny separators */

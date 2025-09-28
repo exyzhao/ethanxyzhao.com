@@ -1,11 +1,80 @@
 /* app/page.tsx */
+'use client'
+
+import { useState, useRef, useEffect } from 'react'
+
 export default function Home() {
+  const [position, setPosition] = useState({ x: 0, y: 0 })
+  const [isDragging, setIsDragging] = useState(false)
+  const [dragStart, setDragStart] = useState({
+    x: 0,
+    y: 0,
+    mouseX: 0,
+    mouseY: 0,
+  })
+  const windowRef = useRef<HTMLDivElement>(null)
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setDragStart({
+      x: position.x,
+      y: position.y,
+      mouseX: e.clientX,
+      mouseY: e.clientY,
+    })
+    setIsDragging(true)
+  }
+
+  const handleMouseMove = (e: MouseEvent) => {
+    if (isDragging) {
+      const deltaX = e.clientX - dragStart.mouseX
+      const deltaY = e.clientY - dragStart.mouseY
+
+      const newX = dragStart.x + deltaX
+      const newY = dragStart.y + deltaY
+
+      // Keep window within viewport bounds
+      const maxX = window.innerWidth - 800 // window width
+      const maxY = window.innerHeight - 600 // approximate window height
+
+      setPosition({
+        x: Math.max(0, Math.min(newX, maxX)),
+        y: Math.max(0, Math.min(newY, maxY)),
+      })
+    }
+  }
+
+  const handleMouseUp = () => {
+    setIsDragging(false)
+  }
+
+  useEffect(() => {
+    if (isDragging) {
+      document.addEventListener('mousemove', handleMouseMove)
+      document.addEventListener('mouseup', handleMouseUp)
+
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove)
+        document.removeEventListener('mouseup', handleMouseUp)
+      }
+    }
+  }, [isDragging, dragStart])
+
   return (
     <main className="text-win98-black min-h-screen p-6">
       {/* Window frame */}
-      <div className="win98-raised mx-auto w-[800px]">
+      <div
+        ref={windowRef}
+        className="win98-raised relative w-[800px]"
+        style={{
+          transform: `translate(${position.x}px, ${position.y}px)`,
+          transition: isDragging ? 'none' : 'transform 0.1s ease-out',
+        }}
+      >
         {/* Title bar */}
-        <div className="win98-titlebar flex items-center justify-between px-2 py-1">
+        <div
+          className="win98-titlebar flex cursor-move items-center justify-between px-2 py-1 select-none"
+          onMouseDown={handleMouseDown}
+        >
           <div className="flex items-center gap-2">
             <div className="bg-win98-white h-4 w-4" />
             {/* app icon stub */}
@@ -17,18 +86,21 @@ export default function Home() {
             <button
               className="win98-btn win98-raised text-win98-black"
               aria-label="Minimize"
+              onMouseDown={(e) => e.stopPropagation()}
             >
               _
             </button>
             <button
               className="win98-btn win98-raised text-win98-black"
               aria-label="Maximize"
+              onMouseDown={(e) => e.stopPropagation()}
             >
               ▢
             </button>
             <button
               className="win98-btn win98-raised text-win98-black"
               aria-label="Close"
+              onMouseDown={(e) => e.stopPropagation()}
             >
               X
             </button>
