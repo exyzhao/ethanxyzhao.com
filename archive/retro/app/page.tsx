@@ -25,16 +25,21 @@ export default function Home() {
   }
 
   const handleMouseMove = (e: MouseEvent) => {
-    if (isDragging) {
+    if (isDragging && windowRef.current) {
       const deltaX = e.clientX - dragStart.mouseX
       const deltaY = e.clientY - dragStart.mouseY
 
       const newX = dragStart.x + deltaX
       const newY = dragStart.y + deltaY
 
+      // Get actual window dimensions
+      const rect = windowRef.current.getBoundingClientRect()
+      const windowWidth = rect.width
+      const windowHeight = rect.height
+
       // Keep window within viewport bounds
-      const maxX = window.innerWidth - 800 // window width
-      const maxY = window.innerHeight - 600 // approximate window height
+      const maxX = window.innerWidth - windowWidth
+      const maxY = window.innerHeight - windowHeight
 
       setPosition({
         x: Math.max(0, Math.min(newX, maxX)),
@@ -60,7 +65,7 @@ export default function Home() {
   }, [isDragging, dragStart])
 
   return (
-    <main className="text-win98-black min-h-screen p-6">
+    <main className="text-win98-black min-h-screen">
       {/* Window frame */}
       <div
         ref={windowRef}
