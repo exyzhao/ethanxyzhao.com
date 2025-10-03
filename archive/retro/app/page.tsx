@@ -6,6 +6,7 @@ import { useState, useRef, useEffect } from 'react'
 export default function Home() {
   const [position, setPosition] = useState({ x: 0, y: 0 })
   const [isDragging, setIsDragging] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   const [dragStart, setDragStart] = useState({
     x: 0,
     y: 0,
@@ -53,6 +54,18 @@ export default function Home() {
   }
 
   useEffect(() => {
+    // Detect mobile viewport and disable dragging when active
+    const media = window.matchMedia('(max-width: 640px)')
+    const handleChange = () => setIsMobile(media.matches)
+    handleChange()
+    media.addEventListener('change', handleChange)
+
+    return () => {
+      media.removeEventListener('change', handleChange)
+    }
+  }, [])
+
+  useEffect(() => {
     if (isDragging) {
       document.addEventListener('mousemove', handleMouseMove)
       document.addEventListener('mouseup', handleMouseUp)
@@ -69,16 +82,20 @@ export default function Home() {
       {/* Window frame */}
       <div
         ref={windowRef}
-        className="win98-raised relative w-[800px]"
-        style={{
-          transform: `translate(${position.x}px, ${position.y}px)`,
-          transition: isDragging ? 'none' : 'transform 0.1s ease-out',
-        }}
+        className={`win98-raised relative ${isMobile ? 'mx-auto w-full max-w-[800px]' : 'w-[800px]'}`}
+        style={
+          isMobile
+            ? undefined
+            : {
+                transform: `translate(${position.x}px, ${position.y}px)`,
+                transition: isDragging ? 'none' : 'transform 0.1s ease-out',
+              }
+        }
       >
         {/* Title bar */}
         <div
-          className="win98-titlebar flex cursor-move items-center justify-between px-2 py-1 select-none"
-          onMouseDown={handleMouseDown}
+          className={`win98-titlebar flex items-center justify-between px-2 py-1 select-none ${isMobile ? '' : 'cursor-move'}`}
+          onMouseDown={isMobile ? undefined : handleMouseDown}
         >
           <div className="flex items-center gap-2">
             <div className="bg-win98-white h-4 w-4" />
@@ -176,10 +193,15 @@ export default function Home() {
         </div>
 
         {/* Content area (page) */}
-        <div className="bg-backg136 win98-sunken mx-2 mb-2 h-[440px] overflow-auto p-3 text-center">
-          <h1 className="font-comic-sans-bold mb-1 text-4xl leading-none tracking-tight text-[#57FF00]">
+        <div
+          className="win98-sunken relative mx-2 mb-2 h-[440px] overflow-auto p-3 text-center"
+          style={{ backgroundColor: '#322357' }}
+        >
+          <h1 className="font-comic-sans-bold neon-green mb-1 text-4xl leading-none tracking-tight text-[#dddb59]">
             Ethan's Epic Homepage
           </h1>
+
+          <div className="crt-scanlines" />
         </div>
 
         {/* Status bar */}

@@ -12,6 +12,12 @@
   --win98-light-gray: #e0e0e0;
   --win98-black: #000000;
   --win98-white: #ffffff;
+
+  /* Checkerboard tiling config */
+  --tile-primary: #8794e2;
+  --tile-secondary: #09cf9b;
+  --tile-size: 100px;
+  --tile-offset: 50px;
 }
 
 @theme inline {
@@ -51,14 +57,6 @@
   font-display: swap;
 }
 
-body {
-  background-image: url('/images/cloud-tile.png');
-  background-repeat: repeat; /* tile in both directions */
-  background-size: 80px 80px; /* force exact tile size */
-  background-position: top left;
-  color: var(--foreground);
-}
-
 /* Retro Windows 98 styling */
 .retro-text {
   font-family: 'MSW98UI', 'MS Sans Serif', sans-serif;
@@ -90,10 +88,27 @@ body {
   font-family: 'MSW98UI', 'MS Sans Serif', sans-serif;
   font-size: 13px;
   line-height: 1.2;
-  background-image: url('/images/win98-clouds.webp');
-  background-size: cover; /* fill the screen */
-  background-position: center; /* keep it centered */
-  background-repeat: no-repeat; /* no tiling */
+  /* Checkerboard tiling: #8794e2 and #09cf9b */
+  background-color: var(--tile-secondary);
+  background-image:
+    linear-gradient(
+      45deg,
+      var(--tile-primary) 25%,
+      transparent 25%,
+      transparent 75%,
+      var(--tile-primary) 75%
+    ),
+    linear-gradient(
+      45deg,
+      var(--tile-primary) 25%,
+      transparent 25%,
+      transparent 75%,
+      var(--tile-primary) 75%
+    );
+  background-size: var(--tile-size) var(--tile-size);
+  background-position:
+    0 0,
+    var(--tile-offset) var(--tile-offset);
 }
 
 /* Windows 98 Color Utility Classes */
@@ -226,4 +241,28 @@ body {
     @apply px-2 py-0.5;
     border-right: 1px solid var(--win98-dark-gray);
   }
+}
+
+/* Hypnospace-esque neon text glow */
+.neon-green {
+  text-shadow:
+    0 0 2px #57ff00,
+    0 0 6px #57ff00,
+    0 0 12px #2bd700;
+}
+
+/* CRT scanline overlay */
+.crt-scanlines::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.08) 0px,
+    rgba(0, 0, 0, 0.08) 1px,
+    transparent 2px,
+    transparent 3px
+  );
+  mix-blend-mode: multiply;
 }
