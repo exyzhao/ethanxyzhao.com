@@ -6,7 +6,6 @@
 
   /* Windows 98 Color Variables */
   --win98-blue: #0080ff;
-  --win98-turquoise: #00c0c0;
   --win98-gray: #c0c0c0;
   --win98-dark-gray: #808080;
   --win98-light-gray: #e0e0e0;
@@ -25,14 +24,6 @@
   --color-foreground: var(--foreground);
   --font-sans: 'MSW98UI', 'MS Sans Serif', sans-serif;
   --font-mono: 'MSW98UI', 'MS Sans Serif', monospace;
-
-  /* Windows 98 Color Palette */
-  --color-win98-blue: #0080ff;
-  --color-win98-gray: #c0c0c0;
-  --color-win98-dark-gray: #808080;
-  --color-win98-light-gray: #e0e0e0;
-  --color-win98-black: #000000;
-  --color-win98-white: #ffffff;
 }
 
 /* Regular */
@@ -57,38 +48,12 @@
   font-display: swap;
 }
 
-/* Retro Windows 98 styling */
-.retro-text {
-  font-family: 'MSW98UI', 'MS Sans Serif', sans-serif;
-  -webkit-font-smoothing: none;
-  -moz-osx-font-smoothing: auto;
-  text-rendering: optimizeSpeed;
-  font-size: 13px;
-  line-height: 1.2;
-  font-weight: 400;
-}
-
-.font-comic-sans {
-  font-family: 'Comic Sans MS', 'Comic Sans', cursive;
-  -webkit-font-smoothing: none;
-  -moz-osx-font-smoothing: auto;
-  text-rendering: optimizeSpeed;
-}
-
-.font-comic-sans-bold {
-  font-family: 'Comic Sans MS', 'Comic Sans', cursive;
-  font-weight: 700;
-  -webkit-font-smoothing: none;
-  -moz-osx-font-smoothing: auto;
-  text-rendering: optimizeSpeed;
-}
-
 /* Apply retro font to body for authentic look */
 body {
   font-family: 'MSW98UI', 'MS Sans Serif', sans-serif;
   font-size: 13px;
   line-height: 1.2;
-  /* Checkerboard tiling: #8794e2 and #09cf9b */
+  /* Checkerboard tiling */
   background-color: var(--tile-secondary);
   background-image:
     linear-gradient(
@@ -111,158 +76,61 @@ body {
     var(--tile-offset) var(--tile-offset);
 }
 
-/* Windows 98 Color Utility Classes */
-.bg-win98-blue {
-  background-color: var(--win98-blue);
-}
-.bg-win98-turquoise {
-  background-color: var(--win98-turquoise);
-}
-.bg-win98-gray {
+/* Win98 reusable utilities */
+.win98-window {
+  border-width: 2px;
+  border-top-color: var(--win98-white);
+  border-right-color: var(--win98-dark-gray);
+  border-bottom-color: var(--win98-dark-gray);
+  border-left-color: var(--win98-white);
   background-color: var(--win98-gray);
+  border-style: solid;
 }
-.bg-win98-dark-gray {
-  background-color: var(--win98-dark-gray);
-}
-.bg-win98-light-gray {
+
+.win98-inset {
+  border-width: 2px;
+  border-top-color: var(--win98-dark-gray);
+  border-right-color: var(--win98-white);
+  border-bottom-color: var(--win98-white);
+  border-left-color: var(--win98-dark-gray);
   background-color: var(--win98-light-gray);
-}
-.bg-win98-black {
-  background-color: var(--win98-black);
-}
-.bg-win98-white {
-  background-color: var(--win98-white);
-}
-.bg-backg136 {
-  background-image: url('/images/backg136.jpg');
-  background-repeat: repeat;
-  background-size: 80px 80px;
-  background-position: top left;
+  border-style: solid;
 }
 
-.text-win98-blue {
-  color: var(--win98-blue);
+.win98-btn {
+  border-width: 2px;
+  border-top-color: var(--win98-white);
+  border-right-color: var(--win98-dark-gray);
+  border-bottom-color: var(--win98-dark-gray);
+  border-left-color: var(--win98-white);
+  background-color: var(--win98-gray);
+  border-style: solid;
 }
-.text-win98-gray {
-  color: var(--win98-gray);
+.win98-btn:hover {
+  background-color: var(--win98-light-gray);
+  border-top-color: var(--win98-white);
+  border-right-color: var(--win98-dark-gray);
+  border-bottom-color: var(--win98-dark-gray);
+  border-left-color: var(--win98-white);
 }
-.text-win98-dark-gray {
-  color: var(--win98-dark-gray);
-}
-.text-win98-light-gray {
-  color: var(--win98-light-gray);
-}
-.text-win98-black {
-  color: var(--win98-black);
-}
-.text-win98-white {
-  color: var(--win98-white);
-}
-
-@layer utilities {
-  /* 3D borders */
-  .win98-raised {
-    border-width: 2px;
-    border-top-color: var(--win98-white);
-    border-left-color: var(--win98-white);
-    border-right-color: var(--win98-dark-gray);
-    border-bottom-color: var(--win98-dark-gray);
-    border-style: solid;
-    background: var(--win98-gray);
-  }
-  .win98-sunken {
-    border-width: 2px;
-    border-top-color: var(--win98-dark-gray);
-    border-left-color: var(--win98-dark-gray);
-    border-right-color: var(--win98-white);
-    border-bottom-color: var(--win98-white);
-    border-style: solid;
-    background: var(--win98-light-gray);
-  }
-
-  /* Buttons */
-  .win98-btn {
-    @apply inline-flex items-center gap-1 px-2 py-0.5 select-none;
-    font-size: 12px;
-    line-height: 1;
-  }
-  .win98-btn.win98-raised:active {
-    /* pressed = sunken */
-    border-top-color: var(--win98-dark-gray);
-    border-left-color: var(--win98-dark-gray);
-    border-right-color: var(--win98-white);
-    border-bottom-color: var(--win98-white);
-    background: var(--win98-light-gray);
-  }
-
-  /* Titlebar (blue gradient) */
-  .win98-titlebar {
-    background: linear-gradient(
-      to right,
-      #000080 0%,
-      #0000a8 60%,
-      #3a6ea5 100%
-    );
-    color: var(--win98-white);
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-  }
-
-  .win98-titlebar:active {
-    background: linear-gradient(
-      to right,
-      #000060 0%,
-      #000088 60%,
-      #2a4e85 100%
-    );
-  }
-
-  /* Tiny separators */
-  .win98-sep {
-    width: 2px;
-    background:
-      linear-gradient(var(--win98-white), var(--win98-white)) left/1px 100%
-        no-repeat,
-      linear-gradient(var(--win98-dark-gray), var(--win98-dark-gray)) right/1px
-        100% no-repeat;
-  }
-
-  /* Toolbar icon stub (square) */
-  .tb-icon {
-    width: 16px;
-    height: 16px;
-    background: var(--win98-dark-gray);
-  }
-
-  /* Status bar cells */
-  .status-cell {
-    @apply px-2 py-0.5;
-    border-right: 1px solid var(--win98-dark-gray);
-  }
+.win98-btn:active {
+  background-color: var(--win98-light-gray);
+  border-top-color: var(--win98-dark-gray);
+  border-right-color: var(--win98-white);
+  border-bottom-color: var(--win98-white);
+  border-left-color: var(--win98-dark-gray);
 }
 
-/* Hypnospace-esque neon text glow */
-.neon-green {
-  text-shadow:
-    0 0 2px #57ff00,
-    0 0 6px #57ff00,
-    0 0 12px #2bd700;
+.win98-separator {
+  background:
+    linear-gradient(white, white) left/1px 100% no-repeat,
+    linear-gradient(#808080, #808080) right/1px 100% no-repeat;
 }
 
-/* CRT scanline overlay */
-.crt-scanlines::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.08) 0px,
-    rgba(0, 0, 0, 0.08) 1px,
-    transparent 2px,
-    transparent 3px
-  );
-  mix-blend-mode: multiply;
+.win98-titlebar {
+  background: linear-gradient(to right, #000080 0%, #0000a8 60%, #3a6ea5 100%);
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }

@@ -1,12 +1,132 @@
-/* app/page.tsx */
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+
+function Win98Button({
+  children,
+  onClick,
+  onMouseDown,
+  ariaLabel,
+  className = '',
+}: {
+  children: React.ReactNode
+  onClick?: () => void
+  onMouseDown?: (e: React.MouseEvent) => void
+  ariaLabel?: string
+  className?: string
+}) {
+  return (
+    <button
+      className={`win98-btn inline-flex items-center gap-1 px-2 py-0.5 text-xs leading-none select-none ${className}`}
+      onClick={onClick}
+      onMouseDown={onMouseDown}
+      aria-label={ariaLabel}
+    >
+      {children}
+    </button>
+  )
+}
+
+function Win98Separator() {
+  return <div className="win98-separator h-6 w-0.5" />
+}
+
+function Win98TitleBar({
+  children,
+  onMouseDown,
+  className = '',
+}: {
+  children: React.ReactNode
+  onMouseDown?: (e: React.MouseEvent) => void
+  className?: string
+}) {
+  return (
+    <div
+      className={`win98-titlebar flex items-center justify-between px-2 py-1 text-white select-none ${className}`}
+      onMouseDown={onMouseDown}
+    >
+      {children}
+    </div>
+  )
+}
+
+function Win98ToolbarIcon() {
+  return <span className="h-4 w-4 bg-[#808080]" />
+}
+
+function Win98StatusBar({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex items-stretch bg-[#c0c0c0] text-xs">{children}</div>
+  )
+}
+
+function Win98StatusCell({ children }: { children: React.ReactNode }) {
+  return <div className="border-r border-[#808080] px-2 py-0.5">{children}</div>
+}
+
+function Win98Taskbar() {
+  return (
+    <div
+      className="win98-window fixed right-0 bottom-0 left-0 flex items-center gap-2 border-b-0 p-1"
+      data-role="win98-taskbar"
+    >
+      <button className="win98-btn inline-flex items-center gap-1 px-3 py-1 text-xs leading-none select-none">
+        <span className="mr-1 inline-block h-4 w-4 bg-[#808080]" />
+        Start
+      </button>
+      <Win98Separator />
+      <div className="win98-inset h-6 flex-1" />
+      <Win98Separator />
+      <div className="win98-window h-6 w-24" />
+    </div>
+  )
+}
+
+function Win98AddressBar() {
+  return (
+    <div className="flex items-center gap-2 px-2 pb-2">
+      <span className="text-xs">Address</span>
+      <div className="win98-inset flex h-6 flex-1 items-center px-1 text-xs">
+        http://www.ethanxyzhao.com/
+      </div>
+      <Win98Button>Go</Win98Button>
+      <Win98Separator />
+      <Win98Button>Links ▾</Win98Button>
+    </div>
+  )
+}
+
+// Components
+function Win98MenuBar() {
+  return (
+    <div className="flex gap-4 px-2 py-1 text-xs">
+      <span>
+        <span className="underline">F</span>ile
+      </span>
+      <span>
+        <span className="underline">E</span>dit
+      </span>
+      <span>
+        <span className="underline">V</span>iew
+      </span>
+      <span>
+        <span className="underline">F</span>avorites
+      </span>
+      <span>
+        <span className="underline">T</span>ools
+      </span>
+      <span>
+        <span className="underline">H</span>elp
+      </span>
+    </div>
+  )
+}
 
 export default function Home() {
   const [position, setPosition] = useState({ x: 0, y: 0 })
   const [isDragging, setIsDragging] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [timeString, setTimeString] = useState('')
   const [dragStart, setDragStart] = useState({
     x: 0,
     y: 0,
@@ -77,12 +197,56 @@ export default function Home() {
     }
   }, [isDragging, dragStart])
 
+  // Center the window on initial load and when switching to desktop layout
+  useEffect(() => {
+    if (isMobile) return
+    const el = windowRef.current
+    if (!el) return
+
+    const center = () => {
+      const rect = el.getBoundingClientRect()
+      const centeredX = Math.max(
+        0,
+        Math.round((window.innerWidth - rect.width) / 2),
+      )
+      const taskbar = document.querySelector(
+        '[data-role="win98-taskbar"]',
+      ) as HTMLElement | null
+      const taskbarHeight = taskbar ? taskbar.offsetHeight : 0
+      const availableHeight = Math.max(0, window.innerHeight - taskbarHeight)
+      const centeredY = Math.max(
+        0,
+        Math.round((availableHeight - rect.height) / 2),
+      )
+      setPosition({ x: centeredX, y: centeredY })
+    }
+
+    const id = requestAnimationFrame(center)
+    return () => cancelAnimationFrame(id)
+  }, [isMobile])
+
+  // Live clock for status bar
+  useEffect(() => {
+    const update = () => {
+      const now = new Date()
+      const str = now.toLocaleTimeString([], {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+      })
+      setTimeString(str)
+    }
+    update()
+    const id = setInterval(update, 1000)
+    return () => clearInterval(id)
+  }, [])
+
   return (
-    <main className="text-win98-black min-h-screen">
+    <main className="min-h-screen text-black">
       {/* Window frame */}
       <div
         ref={windowRef}
-        className={`win98-raised relative ${isMobile ? 'mx-auto w-full max-w-[800px]' : 'w-[800px]'}`}
+        className={`win98-window relative ${isMobile ? 'mx-auto w-full max-w-[800px]' : 'w-[800px]'}`}
         style={
           isMobile
             ? undefined
@@ -93,137 +257,262 @@ export default function Home() {
         }
       >
         {/* Title bar */}
-        <div
-          className={`win98-titlebar flex items-center justify-between px-2 py-1 select-none ${isMobile ? '' : 'cursor-move'}`}
+        <Win98TitleBar
           onMouseDown={isMobile ? undefined : handleMouseDown}
+          className={isMobile ? '' : 'cursor-move'}
         >
           <div className="flex items-center gap-2">
-            <div className="bg-win98-white h-4 w-4" />
+            <div className="h-4 w-4 bg-white" />
             {/* app icon stub */}
             <span className="font-bold">
               Ethan's Epic Homepage — Microsoft Internet Explorer
             </span>
           </div>
           <div className="flex items-center gap-1">
-            <button
-              className="win98-btn win98-raised text-win98-black"
-              aria-label="Minimize"
-              onMouseDown={(e) => e.stopPropagation()}
+            <Win98Button
+              ariaLabel="Minimize"
+              onMouseDown={handleMouseDown}
+              // onClick={onMinimize}
             >
               _
-            </button>
-            <button
-              className="win98-btn win98-raised text-win98-black"
-              aria-label="Maximize"
-              onMouseDown={(e) => e.stopPropagation()}
+            </Win98Button>
+            <Win98Button
+              ariaLabel="Maximize"
+              onMouseDown={handleMouseDown}
+              // onClick={onMaximize}
             >
               ▢
-            </button>
-            <button
-              className="win98-btn win98-raised text-win98-black"
-              aria-label="Close"
-              onMouseDown={(e) => e.stopPropagation()}
+            </Win98Button>
+            <Win98Button
+              ariaLabel="Close"
+              onMouseDown={handleMouseDown}
+              // onClick={onClose}
             >
               X
-            </button>
+            </Win98Button>
           </div>
-        </div>
+        </Win98TitleBar>
 
         {/* Menu bar */}
-        <div className="flex gap-4 px-2 py-1 text-[12px]">
-          <span>
-            <span className="underline">F</span>ile
-          </span>
-          <span>
-            <span className="underline">E</span>dit
-          </span>
-          <span>
-            <span className="underline">V</span>iew
-          </span>
-          <span>
-            <span className="underline">F</span>avorites
-          </span>
-          <span>
-            <span className="underline">T</span>ools
-          </span>
-          <span>
-            <span className="underline">H</span>elp
-          </span>
-        </div>
+        <Win98MenuBar />
 
         {/* Toolbar */}
         <div className="flex items-center gap-2 px-2 pb-1">
-          <button className="win98-btn win98-raised">
-            <span className="tb-icon" /> Back
-          </button>
-          <button className="win98-btn win98-raised">
-            <span className="tb-icon" /> Forward
-          </button>
-          <div className="win98-sep h-6" />
-          <button className="win98-btn win98-raised">
-            <span className="tb-icon" /> Stop
-          </button>
-          <button className="win98-btn win98-raised">
-            <span className="tb-icon" /> Refresh
-          </button>
-          <button className="win98-btn win98-raised">
-            <span className="tb-icon" /> Home
-          </button>
-          <div className="win98-sep h-6" />
-          <button className="win98-btn win98-raised">
-            <span className="tb-icon" /> Search
-          </button>
-          <button className="win98-btn win98-raised">
-            <span className="tb-icon" /> Favorites
-          </button>
-          <button className="win98-btn win98-raised">
-            <span className="tb-icon" /> History
-          </button>
+          <Win98Button>
+            <Win98ToolbarIcon /> Back
+          </Win98Button>
+          <Win98Button>
+            <Win98ToolbarIcon /> Forward
+          </Win98Button>
+          <Win98Separator />
+          <Win98Button>
+            <Win98ToolbarIcon /> Stop
+          </Win98Button>
+          <Win98Button>
+            <Win98ToolbarIcon /> Refresh
+          </Win98Button>
+          <Win98Button>
+            <Win98ToolbarIcon /> Home
+          </Win98Button>
+          <Win98Separator />
+          <Win98Button>
+            <Win98ToolbarIcon /> Search
+          </Win98Button>
+          <Win98Button>
+            <Win98ToolbarIcon /> Favorites
+          </Win98Button>
+          <Win98Button>
+            <Win98ToolbarIcon /> History
+          </Win98Button>
         </div>
 
         {/* Address row */}
-        <div className="flex items-center gap-2 px-2 pb-2">
-          <span className="text-[12px]">Address</span>
-          <div className="win98-sunken flex h-6 flex-1 items-center px-1 text-[12px]">
-            http://www.ethanxyzhao.com/
+        <Win98AddressBar />
+
+        {/* Content area */}
+        <div className="win98-inset relative mx-2 mb-2 h-[440px] overflow-auto">
+          <div
+            style={{
+              all: 'revert',
+              background: 'white',
+              color: 'black',
+              padding: '12px',
+              fontFamily: '"Times New Roman", serif',
+            }}
+          >
+            <div>
+              <b>ETHAN ZHAO</b>
+            </div>
+
+            <div>
+              <h1 className="my-4 text-2xl">
+                I'm Ethan! Welcome to my homepage. I love designing and building
+                things.
+              </h1>
+            </div>
+
+            <div>
+              <div>
+                <h2 className="my-2 text-xl">ABOUT ME</h2>
+              </div>
+              <div>
+                <h3 className="text-lg">Studying:</h3>
+                <h3 className="text-base">
+                  @ The Wharton School, University of Pennsylvania
+                </h3>
+                <ul style={{ listStyleType: 'disc', paddingLeft: '40px' }}>
+                  <li className="text-base">
+                    Operations, Information, and Decisions
+                  </li>
+                  <li className="text-base">Minor in CS</li>
+                </ul>
+
+                <h3 className="text-lg">Work:</h3>
+                <ul style={{ listStyleType: 'disc', paddingLeft: '40px' }}>
+                  <li className="text-base">
+                    SWE Intern at{' '}
+                    <a
+                      target="_blank"
+                      rel="noreferrer"
+                      href="https://withpika.com"
+                      className="underline"
+                    >
+                      <em>Pika Earth</em>
+                    </a>
+                  </li>
+                  <li className="text-base">
+                    PM Intern at{' '}
+                    <a
+                      target="_blank"
+                      rel="noreferrer"
+                      href="https://www.splunk.com/en_us/products/it-service-intelligence.html"
+                      className="underline"
+                    >
+                      <em>Splunk</em>
+                    </a>
+                  </li>
+                  <li className="text-base">
+                    ML & PM Intern at{' '}
+                    <a
+                      target="_blank"
+                      rel="noreferrer"
+                      href="https://watchcharts.com"
+                      className="underline"
+                    >
+                      <em>WatchCharts</em>
+                    </a>
+                  </li>
+                </ul>
+
+                <div>
+                  <h3 className="text-lg">Outside of work:</h3>
+                  <ul style={{ listStyleType: 'disc', paddingLeft: '40px' }}>
+                    <li className="text-base">
+                      Developing recipes and running a{' '}
+                      <a
+                        target="_blank"
+                        rel="noreferrer"
+                        href="https://www.instagram.com/everynowthenn"
+                        className="underline"
+                      >
+                        pop-up dining concept
+                      </a>
+                    </li>
+                    <li className="text-base">
+                      Spending time in makerspaces{' '}
+                      <em>
+                        <u>(coming soon)</u>
+                      </em>
+                    </li>
+                    <li className="text-base">
+                      Enjoying: volleyball, running, board games, crosswords,
+                      farmers' markets
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div>
+                <h2 className="my-[0.83em] text-xl">RECENT PROJECTS</h2>
+              </div>
+              <div>
+                <div>
+                  <h3 className="text-lg underline">
+                    <a
+                      target="_blank"
+                      rel="noreferrer"
+                      href="https://github.com/exyzhao/rag-pdf"
+                    >
+                      <em>PDF Querier</em>
+                    </a>
+                  </h3>
+                  <ul style={{ listStyleType: 'disc', paddingLeft: '40px' }}>
+                    <li className="text-base">
+                      Utilized retrieval-augmented generation to enable querying
+                      across multiple PDF files
+                    </li>
+                    <li className="text-base">
+                      Created Q&A interface providing document citations and
+                      answer history
+                    </li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="text-lg underline">
+                    <a
+                      target="_blank"
+                      rel="noreferrer"
+                      href="https://youtu.be/1XRC1sz3-N8?si=eJJf3mUlSiEbQPGV"
+                    >
+                      <em>Procedural City</em>
+                    </a>
+                  </h3>
+                  <ul style={{ listStyleType: 'disc', paddingLeft: '40px' }}>
+                    <li className="text-base">
+                      Implemented 3D wave function collapse to generate
+                      non-deterministic layouts for a city
+                    </li>
+                    <li className="text-base">
+                      Worked with computer graphics team to populate layout with
+                      assets
+                    </li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="text-lg underline">
+                    <em>Penn Playbook</em>
+                  </h3>
+                  <ul style={{ listStyleType: 'disc', paddingLeft: '40px' }}>
+                    <li className="text-base">
+                      Developed app showcasing visualizations of mood/energy
+                      tracking, confessions, hypotheticals, and other data from
+                      Penn's student population
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h2 className="my-[0.83em] text-xl">EMAIL</h2>
+              <h3 className="my-[0.83em] text-lg">ethanxyzhao@gmail.com</h3>
+            </div>
           </div>
-          <button className="win98-btn win98-raised">Go</button>
-          <div className="win98-sep h-6" />
-          <button className="win98-btn win98-raised">Links ▾</button>
-        </div>
-
-        {/* Content area (page) */}
-        <div
-          className="win98-sunken relative mx-2 mb-2 h-[440px] overflow-auto p-3 text-center"
-          style={{ backgroundColor: '#322357' }}
-        >
-          <h1 className="font-comic-sans-bold neon-green mb-1 text-4xl leading-none tracking-tight text-[#dddb59]">
-            Ethan's Epic Homepage
-          </h1>
-
-          <div className="crt-scanlines" />
         </div>
 
         {/* Status bar */}
-        <div className="bg-win98-gray flex items-stretch text-[12px]">
-          <div className="status-cell">Done</div>
-          <div className="status-cell">Internet</div>
+        <Win98StatusBar>
+          <Win98StatusCell>Done</Win98StatusCell>
+          <Win98StatusCell>Internet</Win98StatusCell>
           <div className="flex-1" />
-          <div className="px-2 py-0.5">2:04 PM</div>
-        </div>
+          <div className="px-2 py-0.5">{timeString}</div>
+        </Win98StatusBar>
       </div>
 
-      {/* Taskbar (bonus) */}
-      <div className="bg-win98-gray fixed right-0 bottom-0 left-0 flex items-center gap-2 border-t-2 border-b-0 border-t-white p-1">
-        <button className="win98-btn win98-raised px-3 py-1 text-[12px]">
-          <span className="bg-win98-dark-gray mr-1 inline-block h-4 w-4" />
-          Start
-        </button>
-        <div className="win98-sep h-6" />
-        <div className="win98-sunken h-6 flex-1" />
-        <div className="win98-sep h-6" />
-        <div className="win98-raised h-6 w-24" />
-      </div>
+      {/* Taskbar */}
+      <Win98Taskbar />
     </main>
   )
 }
