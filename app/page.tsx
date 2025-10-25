@@ -71,7 +71,7 @@ function Win98Taskbar() {
       data-role="win98-taskbar"
     >
       <button className="win98-btn inline-flex items-center gap-1 px-3 py-1 text-xs leading-none select-none">
-        <span className="mr-1 inline-block h-4 w-4 bg-[#808080]" />
+        <img src="/sun.svg" alt="Sun icon" className="mr-1 h-4 w-4" />
         Start
       </button>
       <Win98Separator />
@@ -291,8 +291,7 @@ export default function Home() {
           className={isMobile ? '' : 'cursor-move'}
         >
           <div className="flex items-center gap-2">
-            <div className="h-4 w-4 bg-white" />
-            {/* app icon stub */}
+            <img src="/sun.svg" alt="Sun icon" className="h-4 w-4" />
             {isMobile ? (
               <div className="flex flex-col leading-tight">
                 <span className="font-bold">Ethan's Epic Homepage</span>
@@ -389,30 +388,31 @@ export default function Home() {
             </div>
 
             <div>
-              <h1 className="my-4 text-2xl">
-                I'm Ethan! Welcome to my homepage. I love designing and building
-                things.
+              <h1 className="mt-4 text-2xl">
+                I'm Ethan! I love designing & building things. Welcome to my
+                homepage!
               </h1>
             </div>
 
             <div>
               <div>
-                <h2 className="my-2 text-xl">ABOUT ME</h2>
+                <h2 className="mt-4 text-xl">ABOUT ME</h2>
               </div>
               <div>
-                <h3 className="text-lg">Studying:</h3>
-                <h3 className="text-base">
-                  @ The Wharton School, University of Pennsylvania
-                </h3>
+                <h3 className="mt-2 text-lg">Work:</h3>
                 <ul style={{ listStyleType: 'disc', paddingLeft: '40px' }}>
                   <li className="text-base">
-                    Operations, Information, and Decisions
+                    Software Engineer at{' '}
+                    <a
+                      target="_blank"
+                      rel="noreferrer"
+                      href="https://withpika.com"
+                      className="underline"
+                    >
+                      <em>Pika</em>
+                    </a>{' '}
+                    (current role)
                   </li>
-                  <li className="text-base">Minor in CS</li>
-                </ul>
-
-                <h3 className="text-lg">Work:</h3>
-                <ul style={{ listStyleType: 'disc', paddingLeft: '40px' }}>
                   <li className="text-base">
                     SWE Intern at{' '}
                     <a
@@ -421,7 +421,7 @@ export default function Home() {
                       href="https://withpika.com"
                       className="underline"
                     >
-                      <em>Pika Earth</em>
+                      <em>Pika</em>
                     </a>
                   </li>
                   <li className="text-base">
@@ -448,42 +448,99 @@ export default function Home() {
                   </li>
                 </ul>
 
-                <div>
-                  <h3 className="text-lg">Outside of work:</h3>
-                  <ul style={{ listStyleType: 'disc', paddingLeft: '40px' }}>
-                    <li className="text-base">
-                      Developing recipes and running a{' '}
-                      <a
-                        target="_blank"
-                        rel="noreferrer"
-                        href="https://www.instagram.com/everynowthenn"
-                        className="underline"
-                      >
-                        pop-up dining concept
-                      </a>
-                    </li>
-                    <li className="text-base">
-                      Spending time in makerspaces{' '}
-                      <em>
-                        <u>(coming soon)</u>
-                      </em>
-                    </li>
-                    <li className="text-base">
-                      Enjoying: volleyball, running, board games, crosswords,
-                      farmers' markets
-                    </li>
-                  </ul>
-                </div>
+                <h3 className="mt-2 text-lg">Education:</h3>
+                <p className="text-base">
+                  @ The Wharton School, University of Pennsylvania
+                </p>
+                <ul style={{ listStyleType: 'disc', paddingLeft: '40px' }}>
+                  <li className="text-base">
+                    Operations, Information, & Decisions
+                  </li>
+                  <li className="text-base">Minor in CS</li>
+                </ul>
+
+                <h3 className="mt-2 text-lg">Outside of Work:</h3>
+                <ul style={{ listStyleType: 'disc', paddingLeft: '40px' }}>
+                  <li className="text-base">
+                    Developing recipes
+                    <ul style={{ listStyleType: 'disc', paddingLeft: '40px' }}>
+                      <li className="text-base">
+                        I ran a{' '}
+                        <a
+                          target="_blank"
+                          rel="noreferrer"
+                          href="https://www.instagram.com/everynowthenn"
+                          className="underline"
+                        >
+                          pop-up dining concept
+                        </a>{' '}
+                        in college
+                      </li>
+                      <li className="text-base">
+                        I staged at two Michelin starred restaurants:{' '}
+                        <a
+                          target="_blank"
+                          rel="noreferrer"
+                          href="https://www.tuomenyc.com/"
+                          className="underline"
+                        >
+                          Tuome
+                        </a>{' '}
+                        &{' '}
+                        <a
+                          target="_blank"
+                          rel="noreferrer"
+                          href="https://yingtaonyc.com/"
+                          className="underline"
+                        >
+                          Yingtao
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li className="text-base">
+                    Spending time in makerspaces{' '}
+                    <em>
+                      <u>(pics coming soon)</u>
+                    </em>
+                  </li>
+                  <li className="text-base">
+                    Enjoying: volleyball, running, board games, crosswords,
+                    farmers' markets
+                  </li>
+                </ul>
               </div>
             </div>
 
             <div>
               <div>
-                <h2 className="my-[0.83em] text-xl">RECENT PROJECTS</h2>
+                <h2 className="mt-4 text-xl">RECENT PROJECTS</h2>
               </div>
               <div>
                 <div>
-                  <h3 className="text-lg underline">
+                  <h3 className="mt-2 text-lg underline">
+                    <a
+                      target="_blank"
+                      rel="noreferrer"
+                      href="https://github.com/exyzhao/quest-game"
+                    >
+                      <em>Quest Online</em>
+                    </a>
+                  </h3>
+                  <ul style={{ listStyleType: 'disc', paddingLeft: '40px' }}>
+                    <li className="text-base">
+                      Shipped a real-time, web-based social-deduction game
+                      supporting 4–10 players with lobbies, invite links, and
+                      resume-on-reconnect
+                    </li>
+                    <li className="text-base">
+                      Implemented WebSocket real-time messaging and a server
+                      state machine with optimistic UI
+                    </li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="mt-2 text-lg underline">
                     <a
                       target="_blank"
                       rel="noreferrer"
@@ -504,7 +561,7 @@ export default function Home() {
                   </ul>
                 </div>
                 <div>
-                  <h3 className="text-lg underline">
+                  <h3 className="mt-2 text-lg underline">
                     <a
                       target="_blank"
                       rel="noreferrer"
@@ -525,7 +582,7 @@ export default function Home() {
                   </ul>
                 </div>
                 <div>
-                  <h3 className="text-lg underline">
+                  <h3 className="mt-2 text-lg">
                     <em>Penn Playbook</em>
                   </h3>
                   <ul style={{ listStyleType: 'disc', paddingLeft: '40px' }}>
@@ -540,8 +597,8 @@ export default function Home() {
             </div>
 
             <div>
-              <h2 className="my-[0.83em] text-xl">EMAIL</h2>
-              <h3 className="my-[0.83em] text-lg">ethanxyzhao@gmail.com</h3>
+              <h2 className="mt-4 text-xl">EMAIL</h2>
+              <p className="mt-2 text-lg">ethanxyzhao@gmail.com</p>
             </div>
           </div>
         </div>
