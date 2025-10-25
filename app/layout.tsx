@@ -17,7 +17,8 @@ export const metadata: Metadata = {
     default: 'Ethan Zhao',
     template: '%s | Ethan Zhao',
   },
-  description: "Hey there, I'm Ethan! I love designing and building things. Welcome to my homepage!",
+  description:
+    "Hey there, I'm Ethan! I love designing and building things. Welcome to my homepage!",
   keywords: [
     'Ethan Zhao',
     'software engineer',
@@ -50,7 +51,8 @@ export const metadata: Metadata = {
     url: 'https://ethanxyzhao.com',
     siteName: 'Ethan Zhao',
     title: 'Ethan Zhao',
-    description: "Hey there, I'm Ethan! I love designing and building things. Welcome to my homepage!",
+    description:
+      "Hey there, I'm Ethan! I love designing and building things. Welcome to my homepage!",
     images: [
       {
         url: '/sun.svg',
@@ -63,7 +65,8 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'Ethan Zhao',
-    description: "Hey there, I'm Ethan! I love designing and building things. Welcome to my homepage!",
+    description:
+      "Hey there, I'm Ethan! I love designing and building things. Welcome to my homepage!",
     images: ['/sun.svg'],
     creator: '@ethanxyzhao',
   },
