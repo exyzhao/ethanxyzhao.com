@@ -373,6 +373,7 @@ export default function Home() {
           className={`win98-inset relative mx-2 mb-2 overflow-auto ${
             isMobile ? 'min-h-0 flex-1' : 'h-[440px]'
           }`}
+          style={{ background: 'white' }}
         >
           <div
             style={{
