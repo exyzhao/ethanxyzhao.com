@@ -127,6 +127,9 @@ export default function Home() {
   const [isDragging, setIsDragging] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
   const [timeString, setTimeString] = useState('')
+  const [mobileWindowHeight, setMobileWindowHeight] = useState<number | null>(
+    null,
+  )
   const [dragStart, setDragStart] = useState({
     x: 0,
     y: 0,
@@ -175,7 +178,7 @@ export default function Home() {
 
   useEffect(() => {
     // Detect mobile viewport and disable dragging when active
-    const media = window.matchMedia('(max-width: 640px)')
+    const media = window.matchMedia('(max-width: 800px)')
     const handleChange = () => setIsMobile(media.matches)
     handleChange()
     media.addEventListener('change', handleChange)
@@ -225,6 +228,28 @@ export default function Home() {
     return () => cancelAnimationFrame(id)
   }, [isMobile])
 
+  // Compute mobile window height
+  useEffect(() => {
+    if (!isMobile) {
+      setMobileWindowHeight(null)
+      return
+    }
+
+    const calc = () => {
+      const taskbar = document.querySelector(
+        '[data-role="win98-taskbar"]',
+      ) as HTMLElement | null
+      const taskbarHeight = taskbar ? taskbar.offsetHeight : 0
+      const verticalMargin = 20 // 8px top + 8px bottom
+      const h = Math.max(0, window.innerHeight - taskbarHeight - verticalMargin)
+      setMobileWindowHeight(h)
+    }
+
+    calc()
+    window.addEventListener('resize', calc)
+    return () => window.removeEventListener('resize', calc)
+  }, [isMobile])
+
   // Live clock for status bar
   useEffect(() => {
     const update = () => {
@@ -242,14 +267,18 @@ export default function Home() {
   }, [])
 
   return (
-    <main className="min-h-screen text-black">
+    <main className="h-full text-black">
       {/* Window frame */}
       <div
         ref={windowRef}
-        className={`win98-window relative ${isMobile ? 'mx-auto w-full max-w-[800px]' : 'w-[800px]'}`}
+        className={`win98-window relative ${
+          isMobile ? 'mx-2 mt-2 flex flex-col' : 'flex w-[800px] flex-col'
+        }`}
         style={
           isMobile
-            ? undefined
+            ? {
+                height: mobileWindowHeight ?? undefined,
+              }
             : {
                 transform: `translate(${position.x}px, ${position.y}px)`,
                 transition: isDragging ? 'none' : 'transform 0.1s ease-out',
@@ -264,9 +293,16 @@ export default function Home() {
           <div className="flex items-center gap-2">
             <div className="h-4 w-4 bg-white" />
             {/* app icon stub */}
-            <span className="font-bold">
-              Ethan's Epic Homepage — Microsoft Internet Explorer
-            </span>
+            {isMobile ? (
+              <div className="flex flex-col leading-tight">
+                <span className="font-bold">Ethan's Epic Homepage</span>
+                <span className="font-bold">Microsoft Internet Explorer</span>
+              </div>
+            ) : (
+              <span className="font-bold">
+                Ethan's Epic Homepage — Microsoft Internet Explorer
+              </span>
+            )}
           </div>
           <div className="flex items-center gap-1">
             <Win98Button
@@ -311,32 +347,40 @@ export default function Home() {
           <Win98Button>
             <Win98ToolbarIcon /> Refresh
           </Win98Button>
-          <Win98Button>
-            <Win98ToolbarIcon /> Home
-          </Win98Button>
-          <Win98Separator />
-          <Win98Button>
-            <Win98ToolbarIcon /> Search
-          </Win98Button>
-          <Win98Button>
-            <Win98ToolbarIcon /> Favorites
-          </Win98Button>
-          <Win98Button>
-            <Win98ToolbarIcon /> History
-          </Win98Button>
+          {isMobile ? null : (
+            <>
+              <Win98Button>
+                <Win98ToolbarIcon /> Home
+              </Win98Button>
+              <Win98Separator />
+              <Win98Button>
+                <Win98ToolbarIcon /> Search
+              </Win98Button>
+              <Win98Button>
+                <Win98ToolbarIcon /> Favorites
+              </Win98Button>
+              <Win98Button>
+                <Win98ToolbarIcon /> History
+              </Win98Button>
+            </>
+          )}
         </div>
 
         {/* Address row */}
         <Win98AddressBar />
 
         {/* Content area */}
-        <div className="win98-inset relative mx-2 mb-2 h-[440px] overflow-auto">
+        <div
+          className={`win98-inset relative mx-2 mb-2 overflow-auto ${
+            isMobile ? 'min-h-0 flex-1' : 'h-[440px]'
+          }`}
+        >
           <div
             style={{
               all: 'revert',
               background: 'white',
               color: 'black',
-              padding: '12px',
+              padding: isMobile ? '12px' : '12px 24px',
               fontFamily: '"Times New Roman", serif',
             }}
           >
