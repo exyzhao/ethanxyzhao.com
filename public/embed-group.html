@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { 
+      margin: 0; 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+    }
+    .grecaptcha-badge { visibility: hidden !important; }
+    .embed-container { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 20px; 
+      padding: 30px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+    .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      background: #333;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .close-btn:hover {
+      background: #555;
+    }
+  </style>
+</head>
+<body>
+  <button class="close-btn" onclick="parent.postMessage('closeEmbed', '*')">Close</button>
+  <div class="embed-container">
+    <div>
+      <button 
+        style="padding: 10px 20px; background-color: rgb(33, 140, 116); color: #fff; border: none; border-radius: 6px; font-size: 14px; cursor: pointer; transition: background-color 0.3s ease;"
+        onmouseover="this.style.backgroundColor='rgb(29, 126, 104)';"
+        onmouseout="this.style.backgroundColor='rgb(33, 140, 116)';"
+        onfocus="this.style.outline='none';"
+        id="loy-email-signup-button-58753378-59e5-414c-9664-6a5332b87270"
+      >
+        Join our group
+      </button>
+    </div>
+  </div>
+  <script data-id="58753378-59e5-414c-9664-6a5332b87270" src="https://d23vrjykee3j4x.cloudfront.net/scripts/signup.js"></script>
+</body>
+</html>

@@ -136,6 +136,9 @@ export default function Home() {
     mouseX: 0,
     mouseY: 0,
   })
+  const [activeEmbed, setActiveEmbed] = useState<'none' | 'group' | 'mailing'>(
+    'none',
+  )
   const windowRef = useRef<HTMLDivElement>(null)
 
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -266,6 +269,17 @@ export default function Home() {
     return () => clearInterval(id)
   }, [])
 
+  // Listen for close message from embed iframe
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data === 'closeEmbed') {
+        setActiveEmbed('none')
+      }
+    }
+    window.addEventListener('message', handleMessage)
+    return () => window.removeEventListener('message', handleMessage)
+  }, [])
+
   return (
     <main className="h-full text-black">
       {/* Window frame */}
@@ -306,15 +320,13 @@ export default function Home() {
           <div className="flex items-center gap-1">
             <Win98Button
               ariaLabel="Minimize"
-              onMouseDown={handleMouseDown}
-              // onClick={onMinimize}
+              onClick={() => setActiveEmbed('group')}
             >
               _
             </Win98Button>
             <Win98Button
               ariaLabel="Maximize"
-              onMouseDown={handleMouseDown}
-              // onClick={onMaximize}
+              onClick={() => setActiveEmbed('mailing')}
             >
               ▢
             </Win98Button>
@@ -403,7 +415,19 @@ export default function Home() {
                 <h3 className="mt-2 text-lg">Work:</h3>
                 <ul style={{ listStyleType: 'disc', paddingLeft: '40px' }}>
                   <li className="text-base">
-                    Software Engineer at{' '}
+                    Founding Engineer at{' '}
+                    <a
+                      target="_blank"
+                      rel="noreferrer"
+                      href="https://www.loyalist.com/"
+                      className="underline"
+                    >
+                      <em>Magic/Loyalist</em>
+                    </a>{' '}
+                    (currently)
+                  </li>
+                  <li className="text-base">
+                    Founding Engineer at{' '}
                     <a
                       target="_blank"
                       rel="noreferrer"
@@ -411,8 +435,7 @@ export default function Home() {
                       className="underline"
                     >
                       <em>Pika</em>
-                    </a>{' '}
-                    (current role)
+                    </a>
                   </li>
                   <li className="text-base">
                     SWE Intern at{' '}
@@ -615,6 +638,27 @@ export default function Home() {
 
       {/* Taskbar */}
       <Win98Taskbar />
+
+      {/* Embed overlay */}
+      {activeEmbed !== 'none' && (
+        <iframe
+          src={
+            activeEmbed === 'group'
+              ? '/embed-group.html'
+              : '/embed-mailing.html'
+          }
+          style={{
+            border: 'none',
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            zIndex: 9999,
+          }}
+          title="Signup embeds"
+        />
+      )}
     </main>
   )
 }
