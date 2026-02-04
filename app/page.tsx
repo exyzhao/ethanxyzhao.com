@@ -136,9 +136,6 @@ export default function Home() {
     mouseX: 0,
     mouseY: 0,
   })
-  const [activeEmbed, setActiveEmbed] = useState<'none' | 'group' | 'mailing'>(
-    'none',
-  )
   const windowRef = useRef<HTMLDivElement>(null)
 
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -269,17 +266,6 @@ export default function Home() {
     return () => clearInterval(id)
   }, [])
 
-  // Listen for close message from embed iframe
-  useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
-      if (event.data === 'closeEmbed') {
-        setActiveEmbed('none')
-      }
-    }
-    window.addEventListener('message', handleMessage)
-    return () => window.removeEventListener('message', handleMessage)
-  }, [])
-
   return (
     <main className="h-full text-black">
       {/* Window frame */}
@@ -320,13 +306,15 @@ export default function Home() {
           <div className="flex items-center gap-1">
             <Win98Button
               ariaLabel="Minimize"
-              onClick={() => setActiveEmbed('group')}
+              onMouseDown={handleMouseDown}
+              // onClick={onMinimize}
             >
               _
             </Win98Button>
             <Win98Button
               ariaLabel="Maximize"
-              onClick={() => setActiveEmbed('mailing')}
+              onMouseDown={handleMouseDown}
+              // onClick={onMaximize}
             >
               ▢
             </Win98Button>
@@ -638,27 +626,6 @@ export default function Home() {
 
       {/* Taskbar */}
       <Win98Taskbar />
-
-      {/* Embed overlay */}
-      {activeEmbed !== 'none' && (
-        <iframe
-          src={
-            activeEmbed === 'group'
-              ? '/embed-group.html'
-              : '/embed-mailing.html'
-          }
-          style={{
-            border: 'none',
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100vw',
-            height: '100vh',
-            zIndex: 9999,
-          }}
-          title="Signup embeds"
-        />
-      )}
     </main>
   )
 }
