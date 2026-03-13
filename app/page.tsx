@@ -612,41 +612,6 @@ export default function Home() {
               <h2 className="mt-4 text-xl">EMAIL</h2>
               <p className="mt-2 text-lg">ethanxyzhao@gmail.com</p>
             </div>
-
-            <div
-              dangerouslySetInnerHTML={{
-                __html: `<div>
-            <button 
-              style="padding: 10px 20px; background-color: rgb(30, 55, 153); color: #fff; border: none; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; transition: background-color 0.3s ease;"
-              onmouseover="this.style.backgroundColor='rgb(27, 49, 137)';"
-              onmouseout="this.style.backgroundColor='rgb(30, 55, 153)';"
-              onfocus="this.style.outline='none';"
-              id="loy-email-signup-button-8e296240-93b6-4b86-bbab-5a50916b1bdc"
-            >
-                Join our mailing list
-            </button>
-            <style scoped>
-                .grecaptcha-badge { 
-                  visibility: hidden !important;
-                }
-            </style>
-            
-            </div>
-<script data-id="8e296240-93b6-4b86-bbab-5a50916b1bdc" data-is-group-form="true" data-iframe-url="https://api.eatloyalist.com/signup/form/8e296240-93b6-4b86-bbab-5a50916b1bdc/" src="https://d23vrjykee3j4x.cloudfront.net/scripts/signup.js"></script>`,
-              }}
-            />
-
-            <div
-              dangerouslySetInnerHTML={{
-                __html: `<iframe
-              src="https://api.eatloyalist.com/signup/form/58753378-59e5-414c-9664-6a5332b87270/"
-              style="border: none; width: 100%; height: 480px; max-width: 400px;"
-              title="Signup Form"
-              aria-label="Signup Form"
-            ></iframe>`,
-              }}
-            />
-            
           </div>
         </div>
 
