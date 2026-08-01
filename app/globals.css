@@ -150,19 +150,24 @@ body {
   background-color: var(--win98-gray);
   border-style: solid;
 }
-.win98-btn:hover {
+.win98-btn:hover:not(:disabled) {
   background-color: var(--win98-light-gray);
   border-top-color: var(--win98-white);
   border-right-color: var(--win98-dark-gray);
   border-bottom-color: var(--win98-dark-gray);
   border-left-color: var(--win98-white);
 }
-.win98-btn:active {
+.win98-btn:active:not(:disabled),
+.win98-btn-pressed {
   background-color: var(--win98-light-gray);
   border-top-color: var(--win98-dark-gray);
   border-right-color: var(--win98-white);
   border-bottom-color: var(--win98-white);
   border-left-color: var(--win98-dark-gray);
+}
+.win98-btn:disabled {
+  color: var(--win98-dark-gray);
+  text-shadow: 1px 1px 0 var(--win98-white);
 }
 
 .win98-separator {
