@@ -2,25 +2,22 @@
 
 import { useState, useRef, useEffect } from 'react'
 
+function getTaskbarHeight() {
+  const taskbar = document.querySelector<HTMLElement>(
+    '[data-role="win98-taskbar"]',
+  )
+  return taskbar?.offsetHeight ?? 0
+}
+
 function Win98Button({
   children,
-  onClick,
-  onMouseDown,
-  ariaLabel,
   className = '',
-}: {
-  children: React.ReactNode
-  onClick?: () => void
-  onMouseDown?: (e: React.MouseEvent) => void
-  ariaLabel?: string
-  className?: string
-}) {
+  ...props
+}: React.ComponentProps<'button'>) {
   return (
     <button
       className={`win98-btn inline-flex items-center gap-1 px-2 py-0.5 text-xs leading-none select-none ${className}`}
-      onClick={onClick}
-      onMouseDown={onMouseDown}
-      aria-label={ariaLabel}
+      {...props}
     >
       {children}
     </button>
@@ -50,8 +47,12 @@ function Win98TitleBar({
   )
 }
 
-function Win98ToolbarIcon() {
-  return <span className="h-4 w-4 bg-[#808080]" />
+function Win98ToolbarButtons({ labels }: { labels: string[] }) {
+  return labels.map((label) => (
+    <Win98Button key={label}>
+      <span className="h-4 w-4 bg-[#808080]" /> {label}
+    </Win98Button>
+  ))
 }
 
 function Win98StatusBar({ children }: { children: React.ReactNode }) {
@@ -96,29 +97,34 @@ function Win98AddressBar() {
   )
 }
 
-// Components
 function Win98MenuBar() {
   return (
     <div className="flex gap-4 px-2 py-1 text-xs">
-      <span>
-        <span className="underline">F</span>ile
-      </span>
-      <span>
-        <span className="underline">E</span>dit
-      </span>
-      <span>
-        <span className="underline">V</span>iew
-      </span>
-      <span>
-        <span className="underline">F</span>avorites
-      </span>
-      <span>
-        <span className="underline">T</span>ools
-      </span>
-      <span>
-        <span className="underline">H</span>elp
-      </span>
+      {['File', 'Edit', 'View', 'Favorites', 'Tools', 'Help'].map((item) => (
+        <span key={item}>
+          <span className="underline">{item[0]}</span>
+          {item.slice(1)}
+        </span>
+      ))}
     </div>
+  )
+}
+
+function RetroList({ children }: { children: React.ReactNode }) {
+  return <ul className="list-disc pl-10">{children}</ul>
+}
+
+function ExtLink({
+  href,
+  children,
+}: {
+  href: string
+  children: React.ReactNode
+}) {
+  return (
+    <a target="_blank" rel="noreferrer" href={href} className="underline">
+      {children}
+    </a>
   )
 }
 
@@ -148,34 +154,6 @@ export default function Home() {
     setIsDragging(true)
   }
 
-  const handleMouseMove = (e: MouseEvent) => {
-    if (isDragging && windowRef.current) {
-      const deltaX = e.clientX - dragStart.mouseX
-      const deltaY = e.clientY - dragStart.mouseY
-
-      const newX = dragStart.x + deltaX
-      const newY = dragStart.y + deltaY
-
-      // Get actual window dimensions
-      const rect = windowRef.current.getBoundingClientRect()
-      const windowWidth = rect.width
-      const windowHeight = rect.height
-
-      // Keep window within viewport bounds
-      const maxX = window.innerWidth - windowWidth
-      const maxY = window.innerHeight - windowHeight
-
-      setPosition({
-        x: Math.max(0, Math.min(newX, maxX)),
-        y: Math.max(0, Math.min(newY, maxY)),
-      })
-    }
-  }
-
-  const handleMouseUp = () => {
-    setIsDragging(false)
-  }
-
   useEffect(() => {
     // Detect mobile viewport and disable dragging when active
     const media = window.matchMedia('(max-width: 800px)')
@@ -189,14 +167,33 @@ export default function Home() {
   }, [])
 
   useEffect(() => {
-    if (isDragging) {
-      document.addEventListener('mousemove', handleMouseMove)
-      document.addEventListener('mouseup', handleMouseUp)
+    if (!isDragging) return
 
-      return () => {
-        document.removeEventListener('mousemove', handleMouseMove)
-        document.removeEventListener('mouseup', handleMouseUp)
-      }
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!windowRef.current) return
+
+      const newX = dragStart.x + e.clientX - dragStart.mouseX
+      const newY = dragStart.y + e.clientY - dragStart.mouseY
+
+      // Keep window within viewport bounds
+      const rect = windowRef.current.getBoundingClientRect()
+      const maxX = window.innerWidth - rect.width
+      const maxY = window.innerHeight - rect.height
+
+      setPosition({
+        x: Math.max(0, Math.min(newX, maxX)),
+        y: Math.max(0, Math.min(newY, maxY)),
+      })
+    }
+
+    const handleMouseUp = () => setIsDragging(false)
+
+    document.addEventListener('mousemove', handleMouseMove)
+    document.addEventListener('mouseup', handleMouseUp)
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove)
+      document.removeEventListener('mouseup', handleMouseUp)
     }
   }, [isDragging, dragStart])
 
@@ -212,11 +209,10 @@ export default function Home() {
         0,
         Math.round((window.innerWidth - rect.width) / 2),
       )
-      const taskbar = document.querySelector(
-        '[data-role="win98-taskbar"]',
-      ) as HTMLElement | null
-      const taskbarHeight = taskbar ? taskbar.offsetHeight : 0
-      const availableHeight = Math.max(0, window.innerHeight - taskbarHeight)
+      const availableHeight = Math.max(
+        0,
+        window.innerHeight - getTaskbarHeight(),
+      )
       const centeredY = Math.max(
         0,
         Math.round((availableHeight - rect.height) / 2),
@@ -236,12 +232,11 @@ export default function Home() {
     }
 
     const calc = () => {
-      const taskbar = document.querySelector(
-        '[data-role="win98-taskbar"]',
-      ) as HTMLElement | null
-      const taskbarHeight = taskbar ? taskbar.offsetHeight : 0
-      const verticalMargin = 20 // 8px top + 8px bottom
-      const h = Math.max(0, window.innerHeight - taskbarHeight - verticalMargin)
+      const verticalMargin = 20 // 8px top margin + gap above taskbar
+      const h = Math.max(
+        0,
+        window.innerHeight - getTaskbarHeight() - verticalMargin,
+      )
       setMobileWindowHeight(h)
     }
 
@@ -304,27 +299,9 @@ export default function Home() {
             )}
           </div>
           <div className="flex items-center gap-1">
-            <Win98Button
-              ariaLabel="Minimize"
-              onMouseDown={handleMouseDown}
-              // onClick={onMinimize}
-            >
-              _
-            </Win98Button>
-            <Win98Button
-              ariaLabel="Maximize"
-              onMouseDown={handleMouseDown}
-              // onClick={onMaximize}
-            >
-              ▢
-            </Win98Button>
-            <Win98Button
-              ariaLabel="Close"
-              onMouseDown={handleMouseDown}
-              // onClick={onClose}
-            >
-              X
-            </Win98Button>
+            <Win98Button aria-label="Minimize">_</Win98Button>
+            <Win98Button aria-label="Maximize">▢</Win98Button>
+            <Win98Button aria-label="Close">X</Win98Button>
           </div>
         </Win98TitleBar>
 
@@ -333,34 +310,19 @@ export default function Home() {
 
         {/* Toolbar */}
         <div className="flex items-center gap-2 px-2 pb-1">
-          <Win98Button>
-            <Win98ToolbarIcon /> Back
-          </Win98Button>
-          <Win98Button>
-            <Win98ToolbarIcon /> Forward
-          </Win98Button>
+          <Win98ToolbarButtons labels={['Back', 'Forward']} />
           <Win98Separator />
-          <Win98Button>
-            <Win98ToolbarIcon /> Stop
-          </Win98Button>
-          <Win98Button>
-            <Win98ToolbarIcon /> Refresh
-          </Win98Button>
-          {isMobile ? null : (
+          <Win98ToolbarButtons
+            labels={
+              isMobile ? ['Stop', 'Refresh'] : ['Stop', 'Refresh', 'Home']
+            }
+          />
+          {!isMobile && (
             <>
-              <Win98Button>
-                <Win98ToolbarIcon /> Home
-              </Win98Button>
               <Win98Separator />
-              <Win98Button>
-                <Win98ToolbarIcon /> Search
-              </Win98Button>
-              <Win98Button>
-                <Win98ToolbarIcon /> Favorites
-              </Win98Button>
-              <Win98Button>
-                <Win98ToolbarIcon /> History
-              </Win98Button>
+              <Win98ToolbarButtons
+                labels={['Search', 'Favorites', 'History']}
+              />
             </>
           )}
         </div>
@@ -370,10 +332,9 @@ export default function Home() {
 
         {/* Content area */}
         <div
-          className={`win98-inset relative mx-2 mb-2 overflow-auto ${
+          className={`win98-inset relative mx-2 mb-2 overflow-auto bg-white ${
             isMobile ? 'min-h-0 flex-1' : 'h-[440px]'
           }`}
-          style={{ background: 'white' }}
         >
           <div
             style={{
@@ -401,114 +362,74 @@ export default function Home() {
               </div>
               <div>
                 <h3 className="mt-2 text-lg">Work:</h3>
-                <ul style={{ listStyleType: 'disc', paddingLeft: '40px' }}>
+                <RetroList>
                   <li className="text-base">
                     Founding Engineer at{' '}
-                    <a
-                      target="_blank"
-                      rel="noreferrer"
-                      href="https://www.loyalist.com/"
-                      className="underline"
-                    >
+                    <ExtLink href="https://www.loyalist.com/">
                       <em>Magic/Loyalist</em>
-                    </a>{' '}
+                    </ExtLink>{' '}
                     (currently)
                   </li>
                   <li className="text-base">
                     Founding Engineer at{' '}
-                    <a
-                      target="_blank"
-                      rel="noreferrer"
-                      href="https://withpika.com"
-                      className="underline"
-                    >
+                    <ExtLink href="https://withpika.com">
                       <em>Pika</em>
-                    </a>
+                    </ExtLink>
                   </li>
                   <li className="text-base">
                     SWE Intern at{' '}
-                    <a
-                      target="_blank"
-                      rel="noreferrer"
-                      href="https://withpika.com"
-                      className="underline"
-                    >
+                    <ExtLink href="https://withpika.com">
                       <em>Pika</em>
-                    </a>
+                    </ExtLink>
                   </li>
                   <li className="text-base">
                     PM Intern at{' '}
-                    <a
-                      target="_blank"
-                      rel="noreferrer"
-                      href="https://www.splunk.com/en_us/products/it-service-intelligence.html"
-                      className="underline"
-                    >
+                    <ExtLink href="https://www.splunk.com/en_us/products/it-service-intelligence.html">
                       <em>Splunk</em>
-                    </a>
+                    </ExtLink>
                   </li>
                   <li className="text-base">
                     ML & PM Intern at{' '}
-                    <a
-                      target="_blank"
-                      rel="noreferrer"
-                      href="https://watchcharts.com"
-                      className="underline"
-                    >
+                    <ExtLink href="https://watchcharts.com">
                       <em>WatchCharts</em>
-                    </a>
+                    </ExtLink>
                   </li>
-                </ul>
+                </RetroList>
 
                 <h3 className="mt-2 text-lg">Education:</h3>
                 <p className="text-base">
                   @ The Wharton School, University of Pennsylvania
                 </p>
-                <ul style={{ listStyleType: 'disc', paddingLeft: '40px' }}>
+                <RetroList>
                   <li className="text-base">
                     Operations, Information, & Decisions
                   </li>
                   <li className="text-base">Minor in CS</li>
-                </ul>
+                </RetroList>
 
                 <h3 className="mt-2 text-lg">Outside of Work:</h3>
-                <ul style={{ listStyleType: 'disc', paddingLeft: '40px' }}>
+                <RetroList>
                   <li className="text-base">
                     Developing recipes
-                    <ul style={{ listStyleType: 'disc', paddingLeft: '40px' }}>
+                    <RetroList>
                       <li className="text-base">
                         I ran a{' '}
-                        <a
-                          target="_blank"
-                          rel="noreferrer"
-                          href="https://www.instagram.com/everynowthenn"
-                          className="underline"
-                        >
+                        <ExtLink href="https://www.instagram.com/everynowthenn">
                           pop-up dining concept
-                        </a>{' '}
+                        </ExtLink>{' '}
                         in college
                       </li>
                       <li className="text-base">
                         I staged at two Michelin starred restaurants:{' '}
-                        <a
-                          target="_blank"
-                          rel="noreferrer"
-                          href="https://www.tuomenyc.com/"
-                          className="underline"
-                        >
+                        <ExtLink href="https://www.tuomenyc.com/">
                           Tuome
-                        </a>{' '}
+                        </ExtLink>{' '}
                         &{' '}
-                        <a
-                          target="_blank"
-                          rel="noreferrer"
-                          href="https://yingtaonyc.com/"
-                          className="underline"
-                        >
+                        <ExtLink href="https://yingtaonyc.com/">
                           Yingtao
-                        </a>
+                        </ExtLink>
                       </li>
-                    </ul>
+                    </RetroList>
                   </li>
                   <li className="text-base">
                     Spending time in makerspaces{' '}
@@ -520,7 +441,7 @@ export default function Home() {
                     Enjoying: volleyball, running, board games, crosswords,
                     farmers' markets
                   </li>
-                </ul>
+                </RetroList>
               </div>
             </div>
 
@@ -530,16 +451,12 @@ export default function Home() {
               </div>
               <div>
                 <div>
-                  <h3 className="mt-2 text-lg underline">
-                    <a
-                      target="_blank"
-                      rel="noreferrer"
-                      href="https://github.com/exyzhao/quest-game"
-                    >
+                  <h3 className="mt-2 text-lg">
+                    <ExtLink href="https://github.com/exyzhao/quest-game">
                       <em>Quest Online</em>
-                    </a>
+                    </ExtLink>
                   </h3>
-                  <ul style={{ listStyleType: 'disc', paddingLeft: '40px' }}>
+                  <RetroList>
                     <li className="text-base">
                       Shipped a real-time, web-based social-deduction game
                       supporting 4–10 players with lobbies, invite links, and
@@ -549,19 +466,15 @@ export default function Home() {
                       Implemented WebSocket real-time messaging and a server
                       state machine with optimistic UI
                     </li>
-                  </ul>
+                  </RetroList>
                 </div>
                 <div>
-                  <h3 className="mt-2 text-lg underline">
-                    <a
-                      target="_blank"
-                      rel="noreferrer"
-                      href="https://github.com/exyzhao/rag-pdf"
-                    >
+                  <h3 className="mt-2 text-lg">
+                    <ExtLink href="https://github.com/exyzhao/rag-pdf">
                       <em>PDF Querier</em>
-                    </a>
+                    </ExtLink>
                   </h3>
-                  <ul style={{ listStyleType: 'disc', paddingLeft: '40px' }}>
+                  <RetroList>
                     <li className="text-base">
                       Utilized retrieval-augmented generation to enable querying
                       across multiple PDF files
@@ -570,19 +483,15 @@ export default function Home() {
                       Created Q&A interface providing document citations and
                       answer history
                     </li>
-                  </ul>
+                  </RetroList>
                 </div>
                 <div>
-                  <h3 className="mt-2 text-lg underline">
-                    <a
-                      target="_blank"
-                      rel="noreferrer"
-                      href="https://youtu.be/1XRC1sz3-N8?si=eJJf3mUlSiEbQPGV"
-                    >
+                  <h3 className="mt-2 text-lg">
+                    <ExtLink href="https://youtu.be/1XRC1sz3-N8?si=eJJf3mUlSiEbQPGV">
                       <em>Procedural City</em>
-                    </a>
+                    </ExtLink>
                   </h3>
-                  <ul style={{ listStyleType: 'disc', paddingLeft: '40px' }}>
+                  <RetroList>
                     <li className="text-base">
                       Implemented 3D wave function collapse to generate
                       non-deterministic layouts for a city
@@ -591,19 +500,19 @@ export default function Home() {
                       Worked with computer graphics team to populate layout with
                       assets
                     </li>
-                  </ul>
+                  </RetroList>
                 </div>
                 <div>
                   <h3 className="mt-2 text-lg">
                     <em>Penn Playbook</em>
                   </h3>
-                  <ul style={{ listStyleType: 'disc', paddingLeft: '40px' }}>
+                  <RetroList>
                     <li className="text-base">
                       Developed app showcasing visualizations of mood/energy
                       tracking, confessions, hypotheticals, and other data from
                       Penn's student population
                     </li>
-                  </ul>
+                  </RetroList>
                 </div>
               </div>
             </div>

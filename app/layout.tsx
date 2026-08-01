@@ -1,24 +1,17 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-})
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-})
+const siteName = 'Ethan Zhao'
+const description =
+  "Hey there, I'm Ethan! I love designing and building things. Welcome to my homepage!"
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://ethanxyzhao.com'),
   title: {
-    default: 'Ethan Zhao',
-    template: '%s | Ethan Zhao',
+    default: siteName,
+    template: `%s | ${siteName}`,
   },
-  description:
-    "Hey there, I'm Ethan! I love designing and building things. Welcome to my homepage!",
+  description,
   keywords: [
     'Ethan Zhao',
     'software engineer',
@@ -31,9 +24,9 @@ export const metadata: Metadata = {
     'computer science',
     'operations information decisions',
   ],
-  authors: [{ name: 'Ethan Zhao', url: 'https://ethanxyzhao.com' }],
-  creator: 'Ethan Zhao',
-  publisher: 'Ethan Zhao',
+  authors: [{ name: siteName, url: 'https://ethanxyzhao.com' }],
+  creator: siteName,
+  publisher: siteName,
   robots: {
     index: true,
     follow: true,
@@ -49,10 +42,9 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: 'https://ethanxyzhao.com',
-    siteName: 'Ethan Zhao',
-    title: 'Ethan Zhao',
-    description:
-      "Hey there, I'm Ethan! I love designing and building things. Welcome to my homepage!",
+    siteName,
+    title: siteName,
+    description,
     images: [
       {
         url: '/sun.svg',
@@ -64,9 +56,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary',
-    title: 'Ethan Zhao',
-    description:
-      "Hey there, I'm Ethan! I love designing and building things. Welcome to my homepage!",
+    title: siteName,
+    description,
     images: ['/sun.svg'],
     creator: '@ethanxyzhao',
   },
@@ -88,11 +79,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
+      <body className="antialiased">{children}</body>
     </html>
   )
 }
