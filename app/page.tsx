@@ -131,6 +131,9 @@ function ExtLink({
 export default function Home() {
   const [position, setPosition] = useState({ x: 0, y: 0 })
   const [isDragging, setIsDragging] = useState(false)
+  // Hide the window until it's measured and positioned, so it doesn't
+  // flash at the top-left (or in desktop layout on mobile) on first paint
+  const [isPlaced, setIsPlaced] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
   const [timeString, setTimeString] = useState('')
   const [mobileWindowHeight, setMobileWindowHeight] = useState<number | null>(
@@ -218,6 +221,7 @@ export default function Home() {
         Math.round((availableHeight - rect.height) / 2),
       )
       setPosition({ x: centeredX, y: centeredY })
+      setIsPlaced(true)
     }
 
     const id = requestAnimationFrame(center)
@@ -238,6 +242,7 @@ export default function Home() {
         window.innerHeight - getTaskbarHeight() - verticalMargin,
       )
       setMobileWindowHeight(h)
+      setIsPlaced(true)
     }
 
     calc()
@@ -269,16 +274,18 @@ export default function Home() {
         className={`win98-window relative ${
           isMobile ? 'mx-2 mt-2 flex flex-col' : 'flex w-[800px] flex-col'
         }`}
-        style={
-          isMobile
+        style={{
+          visibility: isPlaced ? undefined : 'hidden',
+          ...(isMobile
             ? {
                 height: mobileWindowHeight ?? undefined,
               }
             : {
                 transform: `translate(${position.x}px, ${position.y}px)`,
-                transition: isDragging ? 'none' : 'transform 0.1s ease-out',
-              }
-        }
+                transition:
+                  isDragging || !isPlaced ? 'none' : 'transform 0.1s ease-out',
+              }),
+        }}
       >
         {/* Title bar */}
         <Win98TitleBar
